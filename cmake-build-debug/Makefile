@@ -117,24 +117,96 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named BriLd
+# Target rules for targets named ld
 
 # Build rule for target.
-BriLd: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 BriLd
-.PHONY : BriLd
+ld: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ld
+.PHONY : ld
 
 # fast build rule for target.
-BriLd/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BriLd.dir/build.make CMakeFiles/BriLd.dir/build
-.PHONY : BriLd/fast
+ld/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/build
+.PHONY : ld/fast
+
+elf/elf_std.o: elf/elf_std.c.o
+.PHONY : elf/elf_std.o
+
+# target to build an object file
+elf/elf_std.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.o
+.PHONY : elf/elf_std.c.o
+
+elf/elf_std.i: elf/elf_std.c.i
+.PHONY : elf/elf_std.i
+
+# target to preprocess a source file
+elf/elf_std.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.i
+.PHONY : elf/elf_std.c.i
+
+elf/elf_std.s: elf/elf_std.c.s
+.PHONY : elf/elf_std.s
+
+# target to generate assembly for a file
+elf/elf_std.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.s
+.PHONY : elf/elf_std.c.s
+
+ld/file.o: ld/file.c.o
+.PHONY : ld/file.o
+
+# target to build an object file
+ld/file.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.o
+.PHONY : ld/file.c.o
+
+ld/file.i: ld/file.c.i
+.PHONY : ld/file.i
+
+# target to preprocess a source file
+ld/file.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.i
+.PHONY : ld/file.c.i
+
+ld/file.s: ld/file.c.s
+.PHONY : ld/file.s
+
+# target to generate assembly for a file
+ld/file.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.s
+.PHONY : ld/file.c.s
+
+ld/inputfile.o: ld/inputfile.c.o
+.PHONY : ld/inputfile.o
+
+# target to build an object file
+ld/inputfile.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.o
+.PHONY : ld/inputfile.c.o
+
+ld/inputfile.i: ld/inputfile.c.i
+.PHONY : ld/inputfile.i
+
+# target to preprocess a source file
+ld/inputfile.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.i
+.PHONY : ld/inputfile.c.i
+
+ld/inputfile.s: ld/inputfile.c.s
+.PHONY : ld/inputfile.s
+
+# target to generate assembly for a file
+ld/inputfile.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.s
+.PHONY : ld/inputfile.c.s
 
 main.o: main.c.o
 .PHONY : main.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BriLd.dir/build.make CMakeFiles/BriLd.dir/main.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -142,7 +214,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BriLd.dir/build.make CMakeFiles/BriLd.dir/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -150,8 +222,32 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/BriLd.dir/build.make CMakeFiles/BriLd.dir/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/main.c.s
 .PHONY : main.c.s
+
+utils/util.o: utils/util.c.o
+.PHONY : utils/util.o
+
+# target to build an object file
+utils/util.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.o
+.PHONY : utils/util.c.o
+
+utils/util.i: utils/util.c.i
+.PHONY : utils/util.i
+
+# target to preprocess a source file
+utils/util.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.i
+.PHONY : utils/util.c.i
+
+utils/util.s: utils/util.c.s
+.PHONY : utils/util.s
+
+# target to generate assembly for a file
+utils/util.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.s
+.PHONY : utils/util.c.s
 
 # Help Target
 help:
@@ -161,10 +257,22 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... BriLd"
+	@echo "... ld"
+	@echo "... elf/elf_std.o"
+	@echo "... elf/elf_std.i"
+	@echo "... elf/elf_std.s"
+	@echo "... ld/file.o"
+	@echo "... ld/file.i"
+	@echo "... ld/file.s"
+	@echo "... ld/inputfile.o"
+	@echo "... ld/inputfile.i"
+	@echo "... ld/inputfile.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... utils/util.o"
+	@echo "... utils/util.i"
+	@echo "... utils/util.s"
 .PHONY : help
 
 

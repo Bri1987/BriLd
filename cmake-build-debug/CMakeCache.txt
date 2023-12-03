@@ -23,6 +23,15 @@ BriLd_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 BriLd_SOURCE_DIR:STATIC=/tmp/tmp.ydSDooATKB
 
+//Value Computed by CMake
+BriLinker_BINARY_DIR:STATIC=/tmp/tmp.ydSDooATKB/cmake-build-debug
+
+//Value Computed by CMake
+BriLinker_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+BriLinker_SOURCE_DIR:STATIC=/tmp/tmp.ydSDooATKB
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 
@@ -139,7 +148,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=BriLd
+CMAKE_PROJECT_NAME:STATIC=BriLinker
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
