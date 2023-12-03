@@ -13,3 +13,14 @@ void WriteMagic(char* contents) {
 
     memcpy(contents, magic, magicSize);
 }
+
+char* ElfGetName(const char* strTab, uint32_t offset) {
+    uint32_t length = 0;
+    while (strTab[offset + length] != '\0') {
+        length++;
+    }
+    char* name = (char*)malloc(length + 1);
+    memcpy(name, strTab + offset, length);
+    name[length] = '\0';
+    return name;
+}

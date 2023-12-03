@@ -42,5 +42,6 @@ typedef struct {
 
 bool CheckMagic(const char* contents);
 void WriteMagic(char* contents);
+char* ElfGetName(const char* strTab, uint32_t offset);
 
 #endif //BRILINKER_ELF_STD_H

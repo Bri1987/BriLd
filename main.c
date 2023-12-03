@@ -9,7 +9,9 @@ int main(int argc, char* argv[]) {
     File *file = NewFile(argv[1]);
 
     InputFile *inputFile = NewInputFile(file);
-    Shdr shdr = inputFile->ElfSections[4];
-    printf("%lu",inputFile->ElfSections->Size / sizeof (Shdr));
+    for(int i=0;i<inputFile->sectionNum;i++){
+        Shdr shdr = inputFile->ElfSections[i];
+        printf("%s\n", ElfGetName(inputFile->ShStrtab,inputFile->ElfSections[i].Name));
+    }
     return 0;
 }
