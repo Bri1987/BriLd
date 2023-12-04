@@ -5,7 +5,7 @@ t=out/tests/$test_name
 
 mkdir -p "$t"
 
-cat <<EOF | $CC -o "$t"/a.o -c -xc -
+cat <<EOF | riscv64-linux-gnu-gcc -o "$t"/a.o -c -xc -
 #include <stdio.h>
 
 int main(void) {
@@ -13,5 +13,5 @@ int main(void) {
 }
 EOF
 
-$CC -B. -static "$t"/a.o -o "$t"/out
+riscv64-linux-gnu-gcc -B../cmake-build-debug/ -static "$t"/a.o -o "$t"/out
 qemu-riscv64 "$t"/out

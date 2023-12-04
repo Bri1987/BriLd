@@ -11,5 +11,6 @@
 void fatal(const char* format, ...);
 char* ReadFile(const char* filename);
 void Read(void* out, const void* data, size_t size);
+char** appendToRemaining(char** remaining, const char* arg);
 
 #endif //BRILD_UTIL_H

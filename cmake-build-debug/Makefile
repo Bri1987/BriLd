@@ -153,77 +153,149 @@ elf/elf_std.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.s
 .PHONY : elf/elf_std.c.s
 
-ld/file.o: ld/file.c.o
-.PHONY : ld/file.o
+linker/context.o: linker/context.c.o
+.PHONY : linker/context.o
 
 # target to build an object file
-ld/file.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.o
-.PHONY : ld/file.c.o
+linker/context.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/context.c.o
+.PHONY : linker/context.c.o
 
-ld/file.i: ld/file.c.i
-.PHONY : ld/file.i
+linker/context.i: linker/context.c.i
+.PHONY : linker/context.i
 
 # target to preprocess a source file
-ld/file.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.i
-.PHONY : ld/file.c.i
+linker/context.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/context.c.i
+.PHONY : linker/context.c.i
 
-ld/file.s: ld/file.c.s
-.PHONY : ld/file.s
+linker/context.s: linker/context.c.s
+.PHONY : linker/context.s
 
 # target to generate assembly for a file
-ld/file.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/file.c.s
-.PHONY : ld/file.c.s
+linker/context.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/context.c.s
+.PHONY : linker/context.c.s
 
-ld/inputfile.o: ld/inputfile.c.o
-.PHONY : ld/inputfile.o
+linker/file.o: linker/file.c.o
+.PHONY : linker/file.o
 
 # target to build an object file
-ld/inputfile.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.o
-.PHONY : ld/inputfile.c.o
+linker/file.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/file.c.o
+.PHONY : linker/file.c.o
 
-ld/inputfile.i: ld/inputfile.c.i
-.PHONY : ld/inputfile.i
+linker/file.i: linker/file.c.i
+.PHONY : linker/file.i
 
 # target to preprocess a source file
-ld/inputfile.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.i
-.PHONY : ld/inputfile.c.i
+linker/file.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/file.c.i
+.PHONY : linker/file.c.i
 
-ld/inputfile.s: ld/inputfile.c.s
-.PHONY : ld/inputfile.s
+linker/file.s: linker/file.c.s
+.PHONY : linker/file.s
 
 # target to generate assembly for a file
-ld/inputfile.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.s
-.PHONY : ld/inputfile.c.s
+linker/file.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/file.c.s
+.PHONY : linker/file.c.s
 
-ld/objectfile.o: ld/objectfile.c.o
-.PHONY : ld/objectfile.o
+linker/filetype.o: linker/filetype.c.o
+.PHONY : linker/filetype.o
 
 # target to build an object file
-ld/objectfile.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.o
-.PHONY : ld/objectfile.c.o
+linker/filetype.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/filetype.c.o
+.PHONY : linker/filetype.c.o
 
-ld/objectfile.i: ld/objectfile.c.i
-.PHONY : ld/objectfile.i
+linker/filetype.i: linker/filetype.c.i
+.PHONY : linker/filetype.i
 
 # target to preprocess a source file
-ld/objectfile.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.i
-.PHONY : ld/objectfile.c.i
+linker/filetype.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/filetype.c.i
+.PHONY : linker/filetype.c.i
 
-ld/objectfile.s: ld/objectfile.c.s
-.PHONY : ld/objectfile.s
+linker/filetype.s: linker/filetype.c.s
+.PHONY : linker/filetype.s
 
 # target to generate assembly for a file
-ld/objectfile.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.s
-.PHONY : ld/objectfile.c.s
+linker/filetype.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/filetype.c.s
+.PHONY : linker/filetype.c.s
+
+linker/inputfile.o: linker/inputfile.c.o
+.PHONY : linker/inputfile.o
+
+# target to build an object file
+linker/inputfile.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputfile.c.o
+.PHONY : linker/inputfile.c.o
+
+linker/inputfile.i: linker/inputfile.c.i
+.PHONY : linker/inputfile.i
+
+# target to preprocess a source file
+linker/inputfile.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputfile.c.i
+.PHONY : linker/inputfile.c.i
+
+linker/inputfile.s: linker/inputfile.c.s
+.PHONY : linker/inputfile.s
+
+# target to generate assembly for a file
+linker/inputfile.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputfile.c.s
+.PHONY : linker/inputfile.c.s
+
+linker/machinetype.o: linker/machinetype.c.o
+.PHONY : linker/machinetype.o
+
+# target to build an object file
+linker/machinetype.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/machinetype.c.o
+.PHONY : linker/machinetype.c.o
+
+linker/machinetype.i: linker/machinetype.c.i
+.PHONY : linker/machinetype.i
+
+# target to preprocess a source file
+linker/machinetype.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/machinetype.c.i
+.PHONY : linker/machinetype.c.i
+
+linker/machinetype.s: linker/machinetype.c.s
+.PHONY : linker/machinetype.s
+
+# target to generate assembly for a file
+linker/machinetype.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/machinetype.c.s
+.PHONY : linker/machinetype.c.s
+
+linker/objectfile.o: linker/objectfile.c.o
+.PHONY : linker/objectfile.o
+
+# target to build an object file
+linker/objectfile.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/objectfile.c.o
+.PHONY : linker/objectfile.c.o
+
+linker/objectfile.i: linker/objectfile.c.i
+.PHONY : linker/objectfile.i
+
+# target to preprocess a source file
+linker/objectfile.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/objectfile.c.i
+.PHONY : linker/objectfile.c.i
+
+linker/objectfile.s: linker/objectfile.c.s
+.PHONY : linker/objectfile.s
+
+# target to generate assembly for a file
+linker/objectfile.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/objectfile.c.s
+.PHONY : linker/objectfile.c.s
 
 main.o: main.c.o
 .PHONY : main.o
@@ -285,15 +357,24 @@ help:
 	@echo "... elf/elf_std.o"
 	@echo "... elf/elf_std.i"
 	@echo "... elf/elf_std.s"
-	@echo "... ld/file.o"
-	@echo "... ld/file.i"
-	@echo "... ld/file.s"
-	@echo "... ld/inputfile.o"
-	@echo "... ld/inputfile.i"
-	@echo "... ld/inputfile.s"
-	@echo "... ld/objectfile.o"
-	@echo "... ld/objectfile.i"
-	@echo "... ld/objectfile.s"
+	@echo "... linker/context.o"
+	@echo "... linker/context.i"
+	@echo "... linker/context.s"
+	@echo "... linker/file.o"
+	@echo "... linker/file.i"
+	@echo "... linker/file.s"
+	@echo "... linker/filetype.o"
+	@echo "... linker/filetype.i"
+	@echo "... linker/filetype.s"
+	@echo "... linker/inputfile.o"
+	@echo "... linker/inputfile.i"
+	@echo "... linker/inputfile.s"
+	@echo "... linker/machinetype.o"
+	@echo "... linker/machinetype.i"
+	@echo "... linker/machinetype.s"
+	@echo "... linker/objectfile.o"
+	@echo "... linker/objectfile.i"
+	@echo "... linker/objectfile.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

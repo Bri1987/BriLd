@@ -59,3 +59,24 @@ void Read(void* out, const void* data, size_t size) {
     // Assuming little-endian format
     memcpy(out, data, size);
 }
+
+char** appendToRemaining(char** remaining, const char* arg) {
+    size_t length = 0;
+
+    // 计算 remaining 的长度
+    while (remaining && remaining[length] != NULL) {
+        length++;
+    }
+
+    // 分配新的内存来存储扩展后的 remaining
+    char** newRemaining = (char**)realloc(remaining, sizeof(char*) * (length + 2));
+
+    // 在新的 remaining 中添加 "-l"+arg
+    char* newEntry = (char*)malloc(strlen(arg) + 3); // 预留 3 字节用于 "-l" 前缀
+    strcpy(newEntry, "-l");
+    strcat(newEntry, arg);
+    newRemaining[length] = newEntry;
+    newRemaining[length + 1] = NULL; // remaining 最后一个元素置为 NULL
+
+    return newRemaining;
+}
