@@ -51,3 +51,27 @@ char* GetBytesFromShdr(InputFile* inputFile, Shdr* shdr){
 char* GetBytesFromIdx(InputFile* inputFile, int64_t idx){
     return GetBytesFromShdr(inputFile,&inputFile->ElfSections[idx]);
 }
+
+Shdr* FindSection(InputFile* f, uint32_t ty) {
+    for (int i = 0; i < f->sectionNum; i++) {
+        Shdr* shdr = &(f->ElfSections[i]);
+        if (shdr->Type == ty) {
+            return shdr;
+        }
+    }
+    return NULL;
+}
+
+void FillUpElfSyms(InputFile* inputFile,Shdr* s){
+    char *bs = GetBytesFromShdr(inputFile,s);
+    int numbs = s->Size / sizeof (Sym);
+    inputFile->ElfSyms = (Sym*) malloc(numbs* sizeof(Sym));
+    inputFile->symNum = numbs;
+
+    while (numbs > 0){
+        //TODO 好像都 没名字
+        Read(&inputFile->ElfSyms[inputFile->symNum - numbs],bs,sizeof(Sym));
+        bs += sizeof(Sym);
+        numbs--;
+    }
+}

@@ -201,6 +201,30 @@ ld/inputfile.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/inputfile.c.s
 .PHONY : ld/inputfile.c.s
 
+ld/objectfile.o: ld/objectfile.c.o
+.PHONY : ld/objectfile.o
+
+# target to build an object file
+ld/objectfile.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.o
+.PHONY : ld/objectfile.c.o
+
+ld/objectfile.i: ld/objectfile.c.i
+.PHONY : ld/objectfile.i
+
+# target to preprocess a source file
+ld/objectfile.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.i
+.PHONY : ld/objectfile.c.i
+
+ld/objectfile.s: ld/objectfile.c.s
+.PHONY : ld/objectfile.s
+
+# target to generate assembly for a file
+ld/objectfile.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/ld/objectfile.c.s
+.PHONY : ld/objectfile.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -267,6 +291,9 @@ help:
 	@echo "... ld/inputfile.o"
 	@echo "... ld/inputfile.i"
 	@echo "... ld/inputfile.s"
+	@echo "... ld/objectfile.o"
+	@echo "... ld/objectfile.i"
+	@echo "... ld/objectfile.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

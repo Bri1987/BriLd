@@ -38,7 +38,14 @@ typedef struct {
     uint64_t EntSize;
 } Shdr;
 
-
+typedef struct {
+    uint32_t Name;
+    uint8_t Info;
+    uint8_t Other;
+    uint16_t Shndx;
+    uint64_t Val;
+    uint64_t Size;
+} Sym;
 
 bool CheckMagic(const char* contents);
 void WriteMagic(char* contents);
