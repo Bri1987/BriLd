@@ -153,6 +153,30 @@ elf/elf_std.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.s
 .PHONY : elf/elf_std.c.s
 
+linker/archive.o: linker/archive.c.o
+.PHONY : linker/archive.o
+
+# target to build an object file
+linker/archive.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/archive.c.o
+.PHONY : linker/archive.c.o
+
+linker/archive.i: linker/archive.c.i
+.PHONY : linker/archive.i
+
+# target to preprocess a source file
+linker/archive.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/archive.c.i
+.PHONY : linker/archive.c.i
+
+linker/archive.s: linker/archive.c.s
+.PHONY : linker/archive.s
+
+# target to generate assembly for a file
+linker/archive.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/archive.c.s
+.PHONY : linker/archive.c.s
+
 linker/context.o: linker/context.c.o
 .PHONY : linker/context.o
 
@@ -224,6 +248,30 @@ linker/filetype.s: linker/filetype.c.s
 linker/filetype.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/filetype.c.s
 .PHONY : linker/filetype.c.s
+
+linker/input.o: linker/input.c.o
+.PHONY : linker/input.o
+
+# target to build an object file
+linker/input.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/input.c.o
+.PHONY : linker/input.c.o
+
+linker/input.i: linker/input.c.i
+.PHONY : linker/input.i
+
+# target to preprocess a source file
+linker/input.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/input.c.i
+.PHONY : linker/input.c.i
+
+linker/input.s: linker/input.c.s
+.PHONY : linker/input.s
+
+# target to generate assembly for a file
+linker/input.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/input.c.s
+.PHONY : linker/input.c.s
 
 linker/inputfile.o: linker/inputfile.c.o
 .PHONY : linker/inputfile.o
@@ -357,6 +405,9 @@ help:
 	@echo "... elf/elf_std.o"
 	@echo "... elf/elf_std.i"
 	@echo "... elf/elf_std.s"
+	@echo "... linker/archive.o"
+	@echo "... linker/archive.i"
+	@echo "... linker/archive.s"
 	@echo "... linker/context.o"
 	@echo "... linker/context.i"
 	@echo "... linker/context.s"
@@ -366,6 +417,9 @@ help:
 	@echo "... linker/filetype.o"
 	@echo "... linker/filetype.i"
 	@echo "... linker/filetype.s"
+	@echo "... linker/input.o"
+	@echo "... linker/input.i"
+	@echo "... linker/input.s"
 	@echo "... linker/inputfile.o"
 	@echo "... linker/inputfile.i"
 	@echo "... linker/inputfile.s"

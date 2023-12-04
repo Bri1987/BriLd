@@ -3,6 +3,10 @@
 
 #include "util.h"
 #include "machinetype.h"
+//#include "objectfile.h"
+
+//解决一下嵌套包含
+struct ObjectFile_;
 
 typedef struct {
     char* Output;
@@ -13,6 +17,10 @@ typedef struct {
 
 typedef struct {
     ContextArgs Args;
+
+    struct ObjectFile_** Objs;
+    int ObjsCount;
+
 } Context;
 
 Context* NewContext();

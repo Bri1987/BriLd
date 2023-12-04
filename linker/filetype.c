@@ -16,5 +16,9 @@ FileType GetFileType(const char* contents){
                 return FileTypeUnknown;
         }
     }
+
+    if (memcmp(contents, "!<arch>\n", 8) == 0) {
+        return FileTypeArchive;
+    }
     return FileTypeUnknown;
 }

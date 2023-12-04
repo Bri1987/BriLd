@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 // Elf32_Ehdr Executable header type. One per ELF file.
 typedef struct Ehdr_ {
@@ -47,8 +48,33 @@ typedef struct {
     uint64_t Size;
 } Sym;
 
+typedef struct {
+    uint64_t Offset;
+    uint32_t Type;
+    uint32_t Sym;
+    int64_t Addend;
+} Rela;
+
+typedef struct {
+    char Name[16];
+    char Date[12];
+    char Uid[6];
+    char Gid[6];
+    char Mode[8];
+    char Size[10];
+    char Fmag[2];
+} ArHdr;
+
 bool CheckMagic(const char* contents);
 void WriteMagic(char* contents);
 char* ElfGetName(const char* strTab, uint32_t offset);
+int GetSize(const ArHdr* a);
+bool IsAbs(const Sym* s);
+bool IsUndef(const Sym* s);
+bool IsCommon(const Sym* s);
+bool HasPrefix(const ArHdr* a, const char* s);
+bool IsStrtab(const ArHdr* a);
+bool IsSymtab(const ArHdr* a);
+char* ReadName(const ArHdr* a, char* strTab);
 
 #endif //BRILINKER_ELF_STD_H

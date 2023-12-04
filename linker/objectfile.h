@@ -11,4 +11,7 @@ typedef struct ObjectFile_{
 
 ObjectFile *NewObjectFile(File* file);
 void Parse(ObjectFile* o);
+
+//-----------------------
+void AddObjectFile(ObjectFile*** Objs, int* ObjsCount, ObjectFile* newObj);
 #endif //BRILINKER_OBJECTFILE_H

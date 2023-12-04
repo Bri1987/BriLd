@@ -14,7 +14,7 @@ void fatal(const char* format, ...) {
 }
 
 // Function to read the entire content of a file into a dynamically allocated buffer
-char* ReadFile(const char* filename) {
+char* ReadFile(const char* filename,uint64_t *len) {
     FILE* file;
     char* buffer;
     size_t file_size;
@@ -22,7 +22,7 @@ char* ReadFile(const char* filename) {
     // Open the file
     file = fopen(filename, "rb");
     if (file == NULL) {
-        perror("Error opening file");
+        //perror("Error opening file");
         return NULL;
     }
 
@@ -49,6 +49,7 @@ char* ReadFile(const char* filename) {
 
     // Null-terminate the buffer
     buffer[file_size] = '\0';
+    *len = file_size;
 
     // Close the file
     fclose(file);
@@ -60,7 +61,7 @@ void Read(void* out, const void* data, size_t size) {
     memcpy(out, data, size);
 }
 
-char** appendToRemaining(char** remaining, const char* arg) {
+char** appendToRemaining(char** remaining, const char* arg,bool l) {
     size_t length = 0;
 
     // 计算 remaining 的长度
@@ -71,12 +72,49 @@ char** appendToRemaining(char** remaining, const char* arg) {
     // 分配新的内存来存储扩展后的 remaining
     char** newRemaining = (char**)realloc(remaining, sizeof(char*) * (length + 2));
 
-    // 在新的 remaining 中添加 "-l"+arg
-    char* newEntry = (char*)malloc(strlen(arg) + 3); // 预留 3 字节用于 "-l" 前缀
-    strcpy(newEntry, "-l");
-    strcat(newEntry, arg);
+    char* newEntry = NULL;
+    if(l){
+        // 在新的 remaining 中添加 "-l"+arg
+        newEntry = (char*)malloc(strlen(arg) + 3); // 预留 3 字节用于 "-l" 前缀
+        strcpy(newEntry, "-l");
+        strcat(newEntry, arg);
+    } else {
+        newEntry = (char*)malloc(strlen(arg));
+        strcpy(newEntry,arg);
+    }
     newRemaining[length] = newEntry;
     newRemaining[length + 1] = NULL; // remaining 最后一个元素置为 NULL
 
     return newRemaining;
+}
+
+// 移除字符串前缀
+char* removePrefix(const char* s, const char* prefix) {
+    size_t prefixLen = strlen(prefix);
+    size_t sLen = strlen(s);
+
+    // 检查 s 是否以 prefix 开头
+    if (strncmp(s, prefix, prefixLen) == 0) {
+        // 动态分配内存以存储移除前缀后的字符串
+        char* result = (char*)malloc(sLen - prefixLen + 1);
+        strcpy(result, s + prefixLen);
+        return result;
+    }
+
+    // 如果不是以 prefix 开头，动态分配内存以存储原始字符串
+    char* result = (char*)malloc(sLen + 1);
+    strcpy(result, s);
+    return result;
+}
+
+// 检查字符串是否以指定前缀开头
+bool hasPrefix(const char* s, const char* prefix) {
+    size_t prefixLen = strlen(prefix);
+
+    // 检查 s 是否以 prefix 开头
+    if (strncmp(s, prefix, prefixLen) == 0) {
+        return true;
+    }
+
+    return false;
 }

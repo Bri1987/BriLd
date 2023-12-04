@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include "file.h"
 #include "elf_std.h"
-#include "objectfile.h"
-#include "context.h"
+#include "input.h"
 
 char** dashes(const char* name) {
     // 分配足够的内存来存储带有单破折号和双破折号的参数
@@ -35,8 +34,8 @@ int readArg(const char* name, char*** args, char** arg) {
     char** opts = dashes(name);
 
     for(int i = 0; opts[i]; i++){
-        char* t1 = *(args[0]);
-        char* t2 = opts[i];
+//        char* t1 = *(args[0]);
+//        char* t2 = opts[i];
         if(strcmp(*(args[0]),opts[i])==0){
             if(strlen(*(args[0])) == 1)
                 fatal("arg missing\n");
@@ -68,6 +67,12 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
     char** remaining;
     //忽略第一个
     argv += 1;
+
+//    while (argc>0){
+//        printf("arg : %s\n",argv[argc-1]);
+//        argc--;
+//    }
+
     while (argv[0] != NULL){
         char *arg;
         if(readArg("output",&argv,&arg) || readArg("o",&argv,&arg)){
@@ -83,7 +88,7 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
         }else if (readArg("L",&argv,&arg)) {
             appendLibraryPath(ctx,arg);
         } else if (readArg("l",&argv,&arg)) {
-            remaining = appendToRemaining(remaining,arg);
+            remaining = appendToRemaining(remaining,arg,true);
         }
         else if (readArg("sysroot",&argv,&arg) ||
                  readFlag("static",&argv) ||
@@ -105,10 +110,11 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
                 fatal("wrong arg!!!!\n");
             }
 
-            remaining = appendToRemaining(remaining,argv[0]);
+            remaining = appendToRemaining(remaining,argv[0],false);
             argv += 1;
         }
     }
+//    printf("%d\n",ctx->Args.LibraryPathsCount);
     return remaining;
 }
 
@@ -141,16 +147,15 @@ int main(int argc, char* argv[]) {
         fatal("unknown emulation type");
     }
 
-    for (size_t i = 0; remaining[i] != NULL; ++i) {
-        printf("%s\n", remaining[i]);
-    }
+//    for (size_t i = 0; remaining[i] != NULL; ++i) {
+//        printf("%s\n", remaining[i]);
+//    }
 
-    File *file = NewFile(argv[1]);
+    ReadInputFiles(ctx,remaining);
+    printf("%d\n",ctx->ObjsCount);
+//    for(int i=0;i<ctx->ObjsCount;i++){
+//        printf("%s\n",ctx->Objs[i]->inputFile->file->Name);
+//    }
 
-    ObjectFile *objectFile = NewObjectFile(file);
-    Parse(objectFile);
-    for(int i=0;i<objectFile->inputFile->symNum;i++){
-        printf("%s\n", ElfGetName(objectFile->inputFile->SymbolStrtab,objectFile->inputFile->ElfSyms[i].Name));
-    }
     return 0;
 }

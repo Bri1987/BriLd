@@ -8,6 +8,7 @@ Context* NewContext(){
 
     ctx->Args.Output = "a.out";
     ctx->Args.Emulation = 0;
+    ctx->Args.LibraryPathsCount=0;
     return ctx;
 }
 
