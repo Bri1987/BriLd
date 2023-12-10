@@ -2,6 +2,9 @@
 #include "file.h"
 #include "elf_std.h"
 #include "input.h"
+#include "passes.h"
+
+HashMap *name_map;
 
 char** dashes(const char* name) {
     // 分配足够的内存来存储带有单破折号和双破折号的参数
@@ -22,6 +25,8 @@ int readFlag(const char* name, char*** args) {
     for (int i = 0; opts[i]; i++) {
         if (*args[0] && strcmp(*args[0], opts[i]) == 0) {
             (*args)++;
+
+          //  printf("flag : %s\n",name);
             return 1; // 找到选项
         }
     }
@@ -33,6 +38,7 @@ int readFlag(const char* name, char*** args) {
 int readArg(const char* name, char*** args, char** arg) {
     char** opts = dashes(name);
 
+
     for(int i = 0; opts[i]; i++){
 //        char* t1 = *(args[0]);
 //        char* t2 = opts[i];
@@ -41,6 +47,9 @@ int readArg(const char* name, char*** args, char** arg) {
                 fatal("arg missing\n");
             *arg = (*args)[1];
             (*args) += 2;
+
+//            printf("\nname : %s\n",name);
+//            printf("args : %s\n",*arg);
             return 1;
         }
 
@@ -56,6 +65,9 @@ int readArg(const char* name, char*** args, char** arg) {
         if (strncmp((*args)[0], prefix, strlen(prefix)) == 0) {
             *arg = (*args)[0] + strlen(prefix);
             (*args) += 1;
+
+//            printf("\nname : %s\n",name);
+//            printf("args : %s\n",*arg);
             return 1;
         }
     }
@@ -64,12 +76,13 @@ int readArg(const char* name, char*** args, char** arg) {
 }
 
 char** parseArgs(int argc, char* argv[],Context* ctx){
-    char** remaining;
+    char** remaining = NULL;
     //忽略第一个
     argv += 1;
 
+    int i=0;
 //    while (argc>0){
-//        printf("arg : %s\n",argv[argc-1]);
+//        printf("arg_ : %s\n",argv[i++]);
 //        argc--;
 //    }
 
@@ -78,7 +91,6 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
         if(readArg("output",&argv,&arg) || readArg("o",&argv,&arg)){
             ctx->Args.Output = malloc(strlen(arg));
             memcpy(ctx->Args.Output,arg,strlen(arg));
-            printf("%s\n",ctx->Args.Output);
         } else if(readArg("m",&argv,&arg)){
             if(strcmp(arg,"elf64lriscv")==0){
                 ctx->Args.Emulation = MachineTypeRISCV64;
@@ -86,6 +98,8 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
             } else
                 fatal("unknown -m arg\n");
         }else if (readArg("L",&argv,&arg)) {
+//            printf("%s\n",argv[0]);
+//            printf("arg : %s\n",arg);
             appendLibraryPath(ctx,arg);
         } else if (readArg("l",&argv,&arg)) {
             remaining = appendToRemaining(remaining,arg,true);
@@ -93,7 +107,7 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
         else if (readArg("sysroot",&argv,&arg) ||
                  readFlag("static",&argv) ||
                 readArg("z",&argv,&arg) ||
-                 readArg("plugin",&argv,&arg) ||
+                readArg("plugin",&argv,&arg) ||
                  readArg("plugin-opt",&argv,&arg) ||
                  readFlag("as-needed",&argv) ||
                  readFlag("start-group",&argv) ||
@@ -110,7 +124,13 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
                 fatal("wrong arg!!!!\n");
             }
 
-            remaining = appendToRemaining(remaining,argv[0],false);
+//            printf("file :%s\n",argv[0]);
+//            printf("%s\n",MachineType_String(ctx->Args.Emulation));
+//            printf("count :%d\n",ctx->Args.LibraryPathsCount);
+            //.so不处理了
+            if(!endsWith(argv[0],"so")){
+                remaining = appendToRemaining(remaining,argv[0],false);
+            }
             argv += 1;
         }
     }
@@ -125,6 +145,7 @@ int main(int argc, char* argv[]) {
 //        printf("%s\n",argv[i]);
 //    }
 
+    //name_map = HashMapInit();
     Context *ctx = NewContext();
     char **remaining = parseArgs(argc,argv,ctx);
 
@@ -144,6 +165,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (ctx->Args.Emulation != MachineTypeRISCV64) {
+        printf("%d\n",ctx->Args.Emulation);
         fatal("unknown emulation type");
     }
 
@@ -153,6 +175,16 @@ int main(int argc, char* argv[]) {
 
     ReadInputFiles(ctx,remaining);
     printf("%d\n",ctx->ObjsCount);
+//    printf("symbols :%d\n", HashMapSize(ctx->SymbolMap));
+//    HashMapFirst(ctx->SymbolMap);
+//    for(Pair* p = HashMapNext(ctx->SymbolMap); p!=NULL; p = HashMapNext(ctx->SymbolMap)){
+//        printf("%s\n",p->key);
+//    }
+//    for(int i=0;i<ctx->ObjsCount;i++){
+//        printf("%d : %s\n",i,ctx->Objs[i]->inputFile->file->Name);
+//    }
+    ResolveSymbols_pass(ctx);
+    printf("final %d\n",ctx->ObjsCount);
 //    for(int i=0;i<ctx->ObjsCount;i++){
 //        printf("%s\n",ctx->Objs[i]->inputFile->file->Name);
 //    }

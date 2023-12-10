@@ -1,5 +1,5 @@
 #include "file.h"
-#include "util.h"
+#include "utils.h"
 
 File* NewFile(const char* filename) {
     File* file = (File*)malloc(sizeof(File));
@@ -48,10 +48,10 @@ File* FindLibrary(Context* ctx, const char* name) {
 
         if (library != NULL) {
            // printf("lib : %s\n",stem);
-           // free(stem);
+            free(stem);
             return library;
         }
-       // free(stem);
+        free(stem);
     }
 
     fatal("Library not found");

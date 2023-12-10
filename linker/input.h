@@ -1,12 +1,12 @@
 #ifndef BRILINKER_INPUT_H
 #define BRILINKER_INPUT_H
 
-#include "util.h"
-#include "objectfile.h"
+#include "utils.h"
+#include "union.h"
 #include "context.h"
 #include "archive.h"
 
-ObjectFile *CreateObjectFile(File* file);
+ObjectFile *CreateObjectFile(Context *ctx,File* file,bool inLib);
 void readFile(Context *ctx,File* file);
 void ReadInputFiles(Context* ctx,char** remaining);
 

@@ -1,7 +1,7 @@
 #ifndef BRILINKER_FILE_H
 #define BRILINKER_FILE_H
 
-#include "util.h"
+#include "utils.h"
 #include "context.h"
 
 typedef struct File {

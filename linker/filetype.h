@@ -1,7 +1,7 @@
 #ifndef BRILINKER_FILETYPE_H
 #define BRILINKER_FILETYPE_H
 
-#include "util.h"
+#include "utils.h"
 #include "elf_std.h"
 
 typedef uint8_t FileType;

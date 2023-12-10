@@ -1,5 +1,7 @@
 #include "elf_std.h"
 
+extern HashMap *name_map;
+
 bool CheckMagic(const char* contents) {
     const unsigned char magic[] = {0x7F, 'E', 'L', 'F'};
     size_t magicSize = sizeof(magic) / sizeof(magic[0]);
@@ -14,7 +16,21 @@ void WriteMagic(char* contents) {
     memcpy(contents, magic, magicSize);
 }
 
-char* ElfGetName(const char* strTab, uint32_t offset) {
+//char* checkNameExists(char* strTab, uint32_t offset){
+//    uint32_t hashKey = hash(strTab,offset);
+//    char* key_ = convertHashToKey(hashKey);
+//
+//    if(HashMapContain(name_map,key_))
+//        return HashMapGet(name_map,key_);
+//
+//    return NULL;
+//}
+
+char* ElfGetName(char* strTab, uint32_t offset) {
+//    char* res;
+//    if(HashMapSize(name_map) > 0 && (res = checkNameExists(strTab,offset)) != NULL){
+//        return res;
+//    }
     uint32_t length = 0;
     while (strTab[offset + length] != '\0') {
         length++;
@@ -22,6 +38,13 @@ char* ElfGetName(const char* strTab, uint32_t offset) {
     char* name = (char*)malloc(length + 1);
     memcpy(name, strTab + offset, length);
     name[length] = '\0';
+
+    uint32_t hashName = hash(name);
+    char* key = convertHashToKey(hashName);
+    if(HashMapContain(name_map,key))
+        return HashMapGet(name_map,key);
+
+    HashMapPut(name_map,key,name);
     return name;
 }
 
@@ -34,11 +57,11 @@ int GetSize(const ArHdr* a) {
 }
 
 bool IsAbs(const Sym* s) {
-    return s->Shndx == 0; // Assuming elf.SHN_ABS is defined as 0
+    return s->Shndx == 65521; // Assuming elf.SHN_ABS is defined as 0
 }
 
 bool IsUndef(const Sym* s) {
-    return s->Shndx == 65521; // Assuming elf.SHN_UNDEF is defined as 65521
+    return s->Shndx == 0; // Assuming elf.SHN_UNDEF is defined as 65521
 }
 
 bool IsCommon(const Sym* s) {

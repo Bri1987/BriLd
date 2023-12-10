@@ -9,9 +9,10 @@ cat <<EOF | riscv64-linux-gnu-gcc -o "$t"/a.o -c -xc -
 #include <stdio.h>
 
 int main(void) {
-    return 5;
+    printf("hello chaochao !\n");
+    return 0;
 }
 EOF
 
-riscv64-linux-gnu-gcc -B../cmake-build-debug/ -static "$t"/a.o -o "$t"/out
+riscv64-linux-gnu-gcc -B../cmake-build-debug/ -static "$t"/a.o -o "$t"/out -O0
 #qemu-riscv64 "$t"/out

@@ -8,6 +8,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "hash_map.h"
+#include <elf.h>
+
+typedef struct name_key{
+    char* strTab;
+    uint32_t offset;
+}name_key;
 
 void fatal(const char* format, ...);
 char* ReadFile(const char* filename,uint64_t *len);
@@ -15,5 +22,9 @@ void Read(void* out, const void* data, size_t size);
 char** appendToRemaining(char** remaining, const char* arg,bool l);
 char* removePrefix(const char* s, const char* prefix);
 bool hasPrefix(const char* s, const char* prefix);
+int endsWith(const char *str, const char *suffix);
+uint32_t hash(const char* str);
+//uint32_t hash(const char* str, uint32_t offset);
+void* convertHashToKey(uint32_t hashValue);
 
 #endif //BRILD_UTIL_H

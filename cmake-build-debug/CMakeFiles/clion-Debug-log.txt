@@ -1,4 +1,4 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /tmp/tmp.ydSDooATKB -B /tmp/tmp.ydSDooATKB/cmake-build-debug
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/ubuntu/learning/BriLd -B /home/ubuntu/learning/BriLd/cmake-build-debug
 -- Configuring done
 -- Generating done
--- Build files have been written to: /tmp/tmp.ydSDooATKB/cmake-build-debug
+-- Build files have been written to: /home/ubuntu/learning/BriLd/cmake-build-debug

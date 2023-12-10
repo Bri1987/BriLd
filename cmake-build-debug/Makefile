@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /tmp/tmp.ydSDooATKB
+CMAKE_SOURCE_DIR = /home/ubuntu/learning/BriLd
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /tmp/tmp.ydSDooATKB/cmake-build-debug
+CMAKE_BINARY_DIR = /home/ubuntu/learning/BriLd/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.ydSDooATKB/cmake-build-debug/CMakeFiles /tmp/tmp.ydSDooATKB/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/learning/BriLd/cmake-build-debug/CMakeFiles /home/ubuntu/learning/BriLd/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /tmp/tmp.ydSDooATKB/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/learning/BriLd/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -152,6 +152,78 @@ elf/elf_std.s: elf/elf_std.c.s
 elf/elf_std.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/elf/elf_std.c.s
 .PHONY : elf/elf_std.c.s
+
+lib/hash.o: lib/hash.c.o
+.PHONY : lib/hash.o
+
+# target to build an object file
+lib/hash.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash.c.o
+.PHONY : lib/hash.c.o
+
+lib/hash.i: lib/hash.c.i
+.PHONY : lib/hash.i
+
+# target to preprocess a source file
+lib/hash.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash.c.i
+.PHONY : lib/hash.c.i
+
+lib/hash.s: lib/hash.c.s
+.PHONY : lib/hash.s
+
+# target to generate assembly for a file
+lib/hash.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash.c.s
+.PHONY : lib/hash.c.s
+
+lib/hash_map.o: lib/hash_map.c.o
+.PHONY : lib/hash_map.o
+
+# target to build an object file
+lib/hash_map.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_map.c.o
+.PHONY : lib/hash_map.c.o
+
+lib/hash_map.i: lib/hash_map.c.i
+.PHONY : lib/hash_map.i
+
+# target to preprocess a source file
+lib/hash_map.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_map.c.i
+.PHONY : lib/hash_map.c.i
+
+lib/hash_map.s: lib/hash_map.c.s
+.PHONY : lib/hash_map.s
+
+# target to generate assembly for a file
+lib/hash_map.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_map.c.s
+.PHONY : lib/hash_map.c.s
+
+lib/hash_set.o: lib/hash_set.c.o
+.PHONY : lib/hash_set.o
+
+# target to build an object file
+lib/hash_set.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_set.c.o
+.PHONY : lib/hash_set.c.o
+
+lib/hash_set.i: lib/hash_set.c.i
+.PHONY : lib/hash_set.i
+
+# target to preprocess a source file
+lib/hash_set.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_set.c.i
+.PHONY : lib/hash_set.c.i
+
+lib/hash_set.s: lib/hash_set.c.s
+.PHONY : lib/hash_set.s
+
+# target to generate assembly for a file
+lib/hash_set.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_set.c.s
+.PHONY : lib/hash_set.c.s
 
 linker/archive.o: linker/archive.c.o
 .PHONY : linker/archive.o
@@ -297,6 +369,30 @@ linker/inputfile.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputfile.c.s
 .PHONY : linker/inputfile.c.s
 
+linker/inputsection.o: linker/inputsection.c.o
+.PHONY : linker/inputsection.o
+
+# target to build an object file
+linker/inputsection.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputsection.c.o
+.PHONY : linker/inputsection.c.o
+
+linker/inputsection.i: linker/inputsection.c.i
+.PHONY : linker/inputsection.i
+
+# target to preprocess a source file
+linker/inputsection.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputsection.c.i
+.PHONY : linker/inputsection.c.i
+
+linker/inputsection.s: linker/inputsection.c.s
+.PHONY : linker/inputsection.s
+
+# target to generate assembly for a file
+linker/inputsection.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/inputsection.c.s
+.PHONY : linker/inputsection.c.s
+
 linker/machinetype.o: linker/machinetype.c.o
 .PHONY : linker/machinetype.o
 
@@ -345,6 +441,54 @@ linker/objectfile.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/objectfile.c.s
 .PHONY : linker/objectfile.c.s
 
+linker/passes.o: linker/passes.c.o
+.PHONY : linker/passes.o
+
+# target to build an object file
+linker/passes.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/passes.c.o
+.PHONY : linker/passes.c.o
+
+linker/passes.i: linker/passes.c.i
+.PHONY : linker/passes.i
+
+# target to preprocess a source file
+linker/passes.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/passes.c.i
+.PHONY : linker/passes.c.i
+
+linker/passes.s: linker/passes.c.s
+.PHONY : linker/passes.s
+
+# target to generate assembly for a file
+linker/passes.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/passes.c.s
+.PHONY : linker/passes.c.s
+
+linker/symbol.o: linker/symbol.c.o
+.PHONY : linker/symbol.o
+
+# target to build an object file
+linker/symbol.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/symbol.c.o
+.PHONY : linker/symbol.c.o
+
+linker/symbol.i: linker/symbol.c.i
+.PHONY : linker/symbol.i
+
+# target to preprocess a source file
+linker/symbol.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/symbol.c.i
+.PHONY : linker/symbol.c.i
+
+linker/symbol.s: linker/symbol.c.s
+.PHONY : linker/symbol.s
+
+# target to generate assembly for a file
+linker/symbol.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/symbol.c.s
+.PHONY : linker/symbol.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -369,29 +513,29 @@ main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/main.c.s
 .PHONY : main.c.s
 
-utils/util.o: utils/util.c.o
-.PHONY : utils/util.o
+utils/utils.o: utils/utils.c.o
+.PHONY : utils/utils.o
 
 # target to build an object file
-utils/util.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.o
-.PHONY : utils/util.c.o
+utils/utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/utils.c.o
+.PHONY : utils/utils.c.o
 
-utils/util.i: utils/util.c.i
-.PHONY : utils/util.i
+utils/utils.i: utils/utils.c.i
+.PHONY : utils/utils.i
 
 # target to preprocess a source file
-utils/util.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.i
-.PHONY : utils/util.c.i
+utils/utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/utils.c.i
+.PHONY : utils/utils.c.i
 
-utils/util.s: utils/util.c.s
-.PHONY : utils/util.s
+utils/utils.s: utils/utils.c.s
+.PHONY : utils/utils.s
 
 # target to generate assembly for a file
-utils/util.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/util.c.s
-.PHONY : utils/util.c.s
+utils/utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/utils/utils.c.s
+.PHONY : utils/utils.c.s
 
 # Help Target
 help:
@@ -405,6 +549,15 @@ help:
 	@echo "... elf/elf_std.o"
 	@echo "... elf/elf_std.i"
 	@echo "... elf/elf_std.s"
+	@echo "... lib/hash.o"
+	@echo "... lib/hash.i"
+	@echo "... lib/hash.s"
+	@echo "... lib/hash_map.o"
+	@echo "... lib/hash_map.i"
+	@echo "... lib/hash_map.s"
+	@echo "... lib/hash_set.o"
+	@echo "... lib/hash_set.i"
+	@echo "... lib/hash_set.s"
 	@echo "... linker/archive.o"
 	@echo "... linker/archive.i"
 	@echo "... linker/archive.s"
@@ -423,18 +576,27 @@ help:
 	@echo "... linker/inputfile.o"
 	@echo "... linker/inputfile.i"
 	@echo "... linker/inputfile.s"
+	@echo "... linker/inputsection.o"
+	@echo "... linker/inputsection.i"
+	@echo "... linker/inputsection.s"
 	@echo "... linker/machinetype.o"
 	@echo "... linker/machinetype.i"
 	@echo "... linker/machinetype.s"
 	@echo "... linker/objectfile.o"
 	@echo "... linker/objectfile.i"
 	@echo "... linker/objectfile.s"
+	@echo "... linker/passes.o"
+	@echo "... linker/passes.i"
+	@echo "... linker/passes.s"
+	@echo "... linker/symbol.o"
+	@echo "... linker/symbol.i"
+	@echo "... linker/symbol.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... utils/util.o"
-	@echo "... utils/util.i"
-	@echo "... utils/util.s"
+	@echo "... utils/utils.o"
+	@echo "... utils/utils.i"
+	@echo "... utils/utils.s"
 .PHONY : help
 
 

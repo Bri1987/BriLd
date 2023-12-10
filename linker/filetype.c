@@ -22,3 +22,10 @@ FileType GetFileType(const char* contents){
     }
     return FileTypeUnknown;
 }
+
+//void CheckFileCompatibility(Context* ctx, File* file) {
+//    FileType mt = GetMachineTypeFromContents(file->Contents);
+//    if (mt != ctx->Args.Emulation) {
+//        fatal("incompatible file type");
+//    }
+//}

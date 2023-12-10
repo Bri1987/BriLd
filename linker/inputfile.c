@@ -1,5 +1,5 @@
 #include <elf.h>
-#include "inputfile.h"
+#include "union.h"
 
 InputFile* NewInputFile(File* file){
     InputFile *inputFile = (InputFile*) malloc(sizeof (InputFile));
@@ -36,6 +36,16 @@ InputFile* NewInputFile(File* file){
     uint64_t len = inputFile->ElfSections[shstrndx].Size;
     inputFile->ShStrtab = malloc(len);
     memcpy(inputFile->ShStrtab,c, len);
+
+    //其他的初始化
+    inputFile->FirstGlobal = 0;
+    inputFile->numLocalSymbols = 0;
+    inputFile->LocalSymbols = NULL;
+    inputFile->numSymbols = 0;
+    inputFile->Symbols = NULL;
+    inputFile->symNum = 0;
+    inputFile->ElfSyms = NULL;
+    inputFile->SymbolStrtab = NULL;
     return inputFile;
 }
 

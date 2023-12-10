@@ -13,9 +13,10 @@
       <paths name="Remote Host (c565803d-6c7c-4af3-a295-b1fcd0dad36f)">
         <serverdata>
           <mappings>
-            <mapping deploy="/tmp/tmp.ydSDooATKB" local="$PROJECT_DIR$" />
+            <mapping deploy="/home/ubuntu/learning/BriLd" local="$PROJECT_DIR$" />
           </mappings>
           <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
             <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
           </excludedPaths>
         </serverdata>

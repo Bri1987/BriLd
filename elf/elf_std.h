@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "utils.h"
 
 // Elf32_Ehdr Executable header type. One per ELF file.
 typedef struct Ehdr_ {
@@ -67,7 +68,7 @@ typedef struct {
 
 bool CheckMagic(const char* contents);
 void WriteMagic(char* contents);
-char* ElfGetName(const char* strTab, uint32_t offset);
+char* ElfGetName(char* strTab, uint32_t offset);
 int GetSize(const ArHdr* a);
 bool IsAbs(const Sym* s);
 bool IsUndef(const Sym* s);

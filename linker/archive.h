@@ -1,7 +1,7 @@
 #ifndef BRILINKER_ARCHIVE_H
 #define BRILINKER_ARCHIVE_H
 
-#include "util.h"
+#include "utils.h"
 #include "filetype.h"
 #include "file.h"
 

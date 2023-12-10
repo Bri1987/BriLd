@@ -1,4 +1,4 @@
-#include "util.h"
+#include "utils.h"
 
 void fatal(const char* format, ...) {
     va_list args;
@@ -117,4 +117,54 @@ bool hasPrefix(const char* s, const char* prefix) {
     }
 
     return false;
+}
+
+int endsWith(const char *str, const char *suffix) {
+    int str_len = strlen(str);
+    int suffix_len = strlen(suffix);
+
+    if (str_len >= suffix_len && strcmp(str + str_len - suffix_len, suffix) == 0) {
+        return 1; // 字符串以指定后缀结尾
+    } else {
+        return 0; // 字符串不以指定后缀结尾
+    }
+}
+
+//uint32_t hash(const char* str, uint32_t offset) {
+//    const uint32_t FNV_PRIME = 16777619;
+//    const uint32_t FNV_OFFSET_BASIS = 2166136261;
+//
+//    uint32_t hashValue = FNV_OFFSET_BASIS;
+//
+//    // 计算字符串的哈希值
+//    for (const char* c = str; *c != '\0'; ++c) {
+//        hashValue ^= (uint32_t)*c;
+//        hashValue *= FNV_PRIME;
+//    }
+//
+//    // 综合加上 offset 的值
+//    hashValue ^= offset;
+//    hashValue *= FNV_PRIME;
+//
+//    return hashValue;
+//}
+
+uint32_t hash(const char* str) {
+    const uint32_t FNV_PRIME = 16777619;
+    const uint32_t FNV_OFFSET_BASIS = 2166136261;
+
+    uint32_t hashValue = FNV_OFFSET_BASIS;
+
+    // 计算字符串的哈希值
+    for (const char* c = str; *c != '\0'; ++c) {
+        hashValue ^= (uint32_t)*c;
+        hashValue *= FNV_PRIME;
+    }
+
+    return hashValue;
+}
+
+void* convertHashToKey(uint32_t hashValue) {
+    // 将哈希值转换为指针类型
+    return (void*)(uintptr_t)hashValue;
 }
