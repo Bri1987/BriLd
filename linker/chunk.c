@@ -12,5 +12,15 @@ Chunk *NewChunk(){
     chunk->shdr.Link = 0;
     chunk->shdr.Info = 0;
     chunk->shdr.Flags = 0;
+    chunk->chunkType  = 0;
     return chunk;
+}
+
+Shdr *GetShdr(Chunk* c){
+    return &c->shdr;
+}
+
+void CopyBuf(Chunk* c,Context* ctx){
+    if(c->chunkType == ChunkTypeEhdr)
+        Ehdr_CopyBuf(c,ctx);
 }

@@ -60,3 +60,21 @@ void RegisterSectionPieces(Context* ctx){
         registerSectionPieces(file);
     }
 }
+
+uint64_t GetFileSize(Context* ctx){
+    uint64_t fileoff = 0;
+    for(int i=0; i< ctx->chunkNum;i++){
+        fileoff = AlignTo(fileoff,ctx->chunk[i]->shdr.AddrAlign);
+        fileoff += ctx->chunk[i]->shdr.Size;
+    }
+    return fileoff;
+}
+
+void CreateSyntheticSections(Context* ctx){
+    struct OutputEhdr_* outputEhdr = NewOutputEhdr();
+    ctx->ehdr = outputEhdr;
+    ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
+    ctx->chunk[ctx->chunkNum] = outputEhdr->chunk;
+    ctx->chunkNum++;
+}
+

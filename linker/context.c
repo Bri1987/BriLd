@@ -15,6 +15,11 @@ Context* NewContext(){
     ctx->Objs = NULL;
     ctx->mergedSectionNum = 0;
     ctx->mergedSections = NULL;
+
+    ctx->chunk = NULL;
+    ctx->chunkNum = 0;
+    ctx->buf = NULL;
+    ctx->ehdr = NULL;
     return ctx;
 }
 

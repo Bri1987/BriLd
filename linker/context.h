@@ -8,7 +8,8 @@
 //解决一下嵌套包含
 struct ObjectFile_;
 struct MergedSection_ ;
-struct Symbol_;
+struct OutputEhdr_;
+struct Chunk_;
 
 typedef struct {
     char* Output;
@@ -27,6 +28,12 @@ typedef struct {
 
     struct MergedSection_ **mergedSections;
     int mergedSectionNum;
+
+    struct Chunk_ **chunk;
+    int chunkNum;
+    char* buf;
+
+    struct OutputEhdr_* ehdr;
 } Context;
 
 Context* NewContext();

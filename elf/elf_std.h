@@ -66,8 +66,19 @@ typedef struct {
     char Fmag[2];
 } ArHdr;
 
+typedef struct {
+    uint32_t Type;
+    uint32_t Flags;
+    uint64_t Offset;
+    uint64_t VAddr;
+    uint64_t PAddr;
+    uint64_t FileSize;
+    uint64_t MemSize;
+    uint64_t Align;
+} Phdr;
+
 bool CheckMagic(const char* contents);
-void WriteMagic(char* contents);
+void WriteMagic(uint8_t * contents);
 char* ElfGetName(char* strTab, uint32_t offset);
 int GetSize(const ArHdr* a);
 bool IsAbs(const Sym* s);

@@ -10,6 +10,8 @@
 #include <assert.h>
 #include "hash_map.h"
 #include <elf.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 void fatal(const char* format, ...);
 char* ReadFile(const char* filename,uint64_t *len);
@@ -19,7 +21,7 @@ char* removePrefix(const char* s, const char* prefix);
 bool hasPrefix(const char* s, const char* prefix);
 int endsWith(const char *str, const char *suffix);
 uint32_t hash(const char* str);
-//uint32_t hash(const char* str, uint32_t offset);
 void* convertHashToKey(uint32_t hashValue);
+uint64_t AlignTo(uint64_t val, uint64_t align);
 
 #endif //BRILD_UTIL_H

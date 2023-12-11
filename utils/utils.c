@@ -168,3 +168,11 @@ void* convertHashToKey(uint32_t hashValue) {
     // 将哈希值转换为指针类型
     return (void*)(uintptr_t)hashValue;
 }
+
+uint64_t AlignTo(uint64_t val, uint64_t align) {
+    if (align == 0) {
+        return val;
+    }
+
+    return (val + align - 1) & /*clear bit*/(~(align - 1));
+}

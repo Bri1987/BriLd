@@ -187,6 +187,21 @@ int main(int argc, char* argv[]) {
 //        printf("%s\n",ctx->Objs[i]->inputFile->file->Name);
 //    }
     RegisterSectionPieces(ctx);
+    CreateSyntheticSections(ctx);
+
+    uint64_t fileoff = GetFileSize(ctx);
+    printf("fileoff %lu\n",fileoff);
+    ctx->buf = malloc(fileoff);
+    //printf("%s\n",ctx->Args.Output);
+    int file = open(ctx->Args.Output, O_RDWR | O_CREAT, 0777);
+    assert(file != -1);
+
+    for(int i=0; i< ctx->chunkNum;i++){
+        Chunk *c = ctx->chunk[i];
+        CopyBuf(c,ctx);
+    }
+    write(file, ctx->buf, fileoff);
+    close(file);
 
     return 0;
 }

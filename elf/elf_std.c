@@ -9,7 +9,7 @@ bool CheckMagic(const char* contents) {
     return memcmp(contents, magic, magicSize) == 0;
 }
 
-void WriteMagic(char* contents) {
+void WriteMagic(uint8_t * contents) {
     const char magic[] = {0x7F, 'E', 'L', 'F'};
     size_t magicSize = sizeof(magic) / sizeof(magic[0]);
 
