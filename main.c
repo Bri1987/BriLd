@@ -80,12 +80,6 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
     //忽略第一个
     argv += 1;
 
-    int i=0;
-//    while (argc>0){
-//        printf("arg_ : %s\n",argv[i++]);
-//        argc--;
-//    }
-
     while (argv[0] != NULL){
         char *arg;
         if(readArg("output",&argv,&arg) || readArg("o",&argv,&arg)){
@@ -134,7 +128,11 @@ char** parseArgs(int argc, char* argv[],Context* ctx){
             argv += 1;
         }
     }
-//    printf("%d\n",ctx->Args.LibraryPathsCount);
+
+    //TODO filepath clean
+//    for(int j = 0;j<ctx->Args.LibraryPathsCount;j++){
+//
+//    }
     return remaining;
 }
 
@@ -188,6 +186,7 @@ int main(int argc, char* argv[]) {
 //    for(int i=0;i<ctx->ObjsCount;i++){
 //        printf("%s\n",ctx->Objs[i]->inputFile->file->Name);
 //    }
+    RegisterSectionPieces(ctx);
 
     return 0;
 }

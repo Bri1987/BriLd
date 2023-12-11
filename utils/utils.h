@@ -11,11 +11,6 @@
 #include "hash_map.h"
 #include <elf.h>
 
-typedef struct name_key{
-    char* strTab;
-    uint32_t offset;
-}name_key;
-
 void fatal(const char* format, ...);
 char* ReadFile(const char* filename,uint64_t *len);
 void Read(void* out, const void* data, size_t size);

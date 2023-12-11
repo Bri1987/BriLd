@@ -225,6 +225,30 @@ lib/hash_set.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/lib/hash_set.c.s
 .PHONY : lib/hash_set.c.s
 
+linker/MergedSection.o: linker/MergedSection.c.o
+.PHONY : linker/MergedSection.o
+
+# target to build an object file
+linker/MergedSection.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/MergedSection.c.o
+.PHONY : linker/MergedSection.c.o
+
+linker/MergedSection.i: linker/MergedSection.c.i
+.PHONY : linker/MergedSection.i
+
+# target to preprocess a source file
+linker/MergedSection.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/MergedSection.c.i
+.PHONY : linker/MergedSection.c.i
+
+linker/MergedSection.s: linker/MergedSection.c.s
+.PHONY : linker/MergedSection.s
+
+# target to generate assembly for a file
+linker/MergedSection.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/MergedSection.c.s
+.PHONY : linker/MergedSection.c.s
+
 linker/archive.o: linker/archive.c.o
 .PHONY : linker/archive.o
 
@@ -248,6 +272,30 @@ linker/archive.s: linker/archive.c.s
 linker/archive.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/archive.c.s
 .PHONY : linker/archive.c.s
+
+linker/chunk.o: linker/chunk.c.o
+.PHONY : linker/chunk.o
+
+# target to build an object file
+linker/chunk.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/chunk.c.o
+.PHONY : linker/chunk.c.o
+
+linker/chunk.i: linker/chunk.c.i
+.PHONY : linker/chunk.i
+
+# target to preprocess a source file
+linker/chunk.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/chunk.c.i
+.PHONY : linker/chunk.c.i
+
+linker/chunk.s: linker/chunk.c.s
+.PHONY : linker/chunk.s
+
+# target to generate assembly for a file
+linker/chunk.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/chunk.c.s
+.PHONY : linker/chunk.c.s
 
 linker/context.o: linker/context.c.o
 .PHONY : linker/context.o
@@ -417,6 +465,30 @@ linker/machinetype.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/machinetype.c.s
 .PHONY : linker/machinetype.c.s
 
+linker/mergeableSection.o: linker/mergeableSection.c.o
+.PHONY : linker/mergeableSection.o
+
+# target to build an object file
+linker/mergeableSection.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/mergeableSection.c.o
+.PHONY : linker/mergeableSection.c.o
+
+linker/mergeableSection.i: linker/mergeableSection.c.i
+.PHONY : linker/mergeableSection.i
+
+# target to preprocess a source file
+linker/mergeableSection.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/mergeableSection.c.i
+.PHONY : linker/mergeableSection.c.i
+
+linker/mergeableSection.s: linker/mergeableSection.c.s
+.PHONY : linker/mergeableSection.s
+
+# target to generate assembly for a file
+linker/mergeableSection.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/mergeableSection.c.s
+.PHONY : linker/mergeableSection.c.s
+
 linker/objectfile.o: linker/objectfile.c.o
 .PHONY : linker/objectfile.o
 
@@ -441,6 +513,30 @@ linker/objectfile.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/objectfile.c.s
 .PHONY : linker/objectfile.c.s
 
+linker/output.o: linker/output.c.o
+.PHONY : linker/output.o
+
+# target to build an object file
+linker/output.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/output.c.o
+.PHONY : linker/output.c.o
+
+linker/output.i: linker/output.c.i
+.PHONY : linker/output.i
+
+# target to preprocess a source file
+linker/output.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/output.c.i
+.PHONY : linker/output.c.i
+
+linker/output.s: linker/output.c.s
+.PHONY : linker/output.s
+
+# target to generate assembly for a file
+linker/output.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/output.c.s
+.PHONY : linker/output.c.s
+
 linker/passes.o: linker/passes.c.o
 .PHONY : linker/passes.o
 
@@ -464,6 +560,30 @@ linker/passes.s: linker/passes.c.s
 linker/passes.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/passes.c.s
 .PHONY : linker/passes.c.s
+
+linker/sectionfragment.o: linker/sectionfragment.c.o
+.PHONY : linker/sectionfragment.o
+
+# target to build an object file
+linker/sectionfragment.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/sectionfragment.c.o
+.PHONY : linker/sectionfragment.c.o
+
+linker/sectionfragment.i: linker/sectionfragment.c.i
+.PHONY : linker/sectionfragment.i
+
+# target to preprocess a source file
+linker/sectionfragment.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/sectionfragment.c.i
+.PHONY : linker/sectionfragment.c.i
+
+linker/sectionfragment.s: linker/sectionfragment.c.s
+.PHONY : linker/sectionfragment.s
+
+# target to generate assembly for a file
+linker/sectionfragment.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/sectionfragment.c.s
+.PHONY : linker/sectionfragment.c.s
 
 linker/symbol.o: linker/symbol.c.o
 .PHONY : linker/symbol.o
@@ -558,9 +678,15 @@ help:
 	@echo "... lib/hash_set.o"
 	@echo "... lib/hash_set.i"
 	@echo "... lib/hash_set.s"
+	@echo "... linker/MergedSection.o"
+	@echo "... linker/MergedSection.i"
+	@echo "... linker/MergedSection.s"
 	@echo "... linker/archive.o"
 	@echo "... linker/archive.i"
 	@echo "... linker/archive.s"
+	@echo "... linker/chunk.o"
+	@echo "... linker/chunk.i"
+	@echo "... linker/chunk.s"
 	@echo "... linker/context.o"
 	@echo "... linker/context.i"
 	@echo "... linker/context.s"
@@ -582,12 +708,21 @@ help:
 	@echo "... linker/machinetype.o"
 	@echo "... linker/machinetype.i"
 	@echo "... linker/machinetype.s"
+	@echo "... linker/mergeableSection.o"
+	@echo "... linker/mergeableSection.i"
+	@echo "... linker/mergeableSection.s"
 	@echo "... linker/objectfile.o"
 	@echo "... linker/objectfile.i"
 	@echo "... linker/objectfile.s"
+	@echo "... linker/output.o"
+	@echo "... linker/output.i"
+	@echo "... linker/output.s"
 	@echo "... linker/passes.o"
 	@echo "... linker/passes.i"
 	@echo "... linker/passes.s"
+	@echo "... linker/sectionfragment.o"
+	@echo "... linker/sectionfragment.i"
+	@echo "... linker/sectionfragment.s"
 	@echo "... linker/symbol.o"
 	@echo "... linker/symbol.i"
 	@echo "... linker/symbol.s"

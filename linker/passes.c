@@ -3,12 +3,12 @@ ObjectFile** RemoveIf(ObjectFile** elems, int* count) {
     int num = *count;
     size_t i = 0;
     for (size_t j = 0; j < num; j++) {
-        if (elems[j]->inputFile->isAlive) {
+        if (!elems[j]->inputFile->isAlive) {
+            (*count)--;
             continue;
         }
         elems[i] = elems[j];
         i++;
-        (*count)--;
     }
 
     return elems;
@@ -54,3 +54,9 @@ void MarkLiveObjects(Context* ctx) {
 }
 
 
+void RegisterSectionPieces(Context* ctx){
+    for (int i = 0; i < ctx->ObjsCount; i++) {
+        ObjectFile *file = ctx->Objs[i];
+        registerSectionPieces(file);
+    }
+}

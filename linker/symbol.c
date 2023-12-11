@@ -14,11 +14,18 @@ Symbol *NewSymbol(char* name){
     symbol->file = NULL;
     symbol->inputSection = NULL;
     symbol->value = 0;
+    symbol->sectionFragment = NULL;
     return symbol;
 }
 
 void SetInputSection(Symbol *s,InputSection* isec){
     s->inputSection = isec;
+    s->sectionFragment = NULL;
+}
+
+void SetSectionFragment(Symbol* s,SectionFragment* frag){
+    s->sectionFragment = frag;
+    s->inputSection = NULL;
 }
 
 Symbol *GetSymbolByName(Context* ctx,char* name){

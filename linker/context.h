@@ -7,6 +7,7 @@
 
 //解决一下嵌套包含
 struct ObjectFile_;
+struct MergedSection_ ;
 struct Symbol_;
 
 typedef struct {
@@ -23,6 +24,9 @@ typedef struct {
     int ObjsCount;
 
     HashMap *SymbolMap;  //char*,Symbol*
+
+    struct MergedSection_ **mergedSections;
+    int mergedSectionNum;
 } Context;
 
 Context* NewContext();

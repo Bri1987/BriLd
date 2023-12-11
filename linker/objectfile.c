@@ -10,6 +10,8 @@ ObjectFile *NewObjectFile(File* file,bool isAlive){
     objectFile->SymtabSec = NULL;
     objectFile->SymtabShndxSec = NULL;
     objectFile->isecNum = 0;
+    objectFile->mergeableSections = NULL;
+    objectFile->mergeableSectionsNum = 0;
     return objectFile;
 }
 
@@ -22,6 +24,7 @@ void Parse(Context *ctx,ObjectFile* o){
     }
     InitializeSections(o);
     InitializeSymbols(ctx,o);
+    InitializeMergeableSections(o,ctx);
 }
 
 // 添加 ObjectFile 到 Objs 数组
@@ -59,6 +62,7 @@ void FillUpSymtabShndxSec(ObjectFile* o,Shdr* s){
 
 void InitializeSections(ObjectFile* o){
     o->Sections = (InputSection **)calloc(o->inputFile->sectionNum, sizeof(InputSection *));
+    o->isecNum = o->inputFile->sectionNum;
 
     for (int i = 0; i < o->inputFile->sectionNum; ++i) {
         Shdr *shdr = &o->inputFile->ElfSections[i];
@@ -130,6 +134,116 @@ void InitializeSymbols(Context *ctx,ObjectFile* o){
     }
 }
 
+void InitializeMergeableSections(ObjectFile * o,Context* ctx){
+    o->mergeableSectionsNum = o->isecNum;
+    o->mergeableSections = (MergeableSection**)malloc(o->mergeableSectionsNum * sizeof(MergeableSection*));
+    if(o->mergeableSections == NULL)
+        fatal("null mergeableSections init\n");
+
+    for (int i = 0; i < o->isecNum; i++) {
+        InputSection * isec = o->Sections[i];
+        if (isec != NULL && isec->isAlive &&
+            (shdr_(isec)->Flags & SHF_MERGE) != 0) {
+            o->mergeableSections[i] = splitSection(ctx, isec);
+            isec->isAlive = false;      //被拆了，不再需要了
+        } else {
+            o->mergeableSections[i] = NULL;
+        }
+    }
+}
+
+int findNull(const char* data, uint64_t data_len, int entSize) {
+    if (entSize == 1) {
+        const char* result = memchr(data, 0, data_len);
+        if (result != NULL) {
+            return (int)(intptr_t)(result - data);
+        }
+    } else {
+        for (int i = 0; i <= data_len - entSize; i += entSize) {
+            const char* bs = data + i;
+            int allZeros = 1;
+            for (int j = 0; j < entSize; j++) {
+                if (bs[j] != 0) {
+                    allZeros = 0;
+                    break;
+                }
+            }
+            if (allZeros) {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
+
+MergeableSection *splitSection(Context* ctx,InputSection* isec){
+    MergeableSection *m = NewMergeableSection();
+    Shdr *shdr = shdr_(isec);
+    m->parent = GetMergedSectionInstance(ctx,Name(isec),shdr->Type,shdr->Flags);
+    m->p2align = isec->P2Align;
+
+    char *data = isec->contents;
+    uint64_t offset = 0;
+    uint64_t data_len = shdr->Size;
+    if((shdr->Flags & SHF_STRINGS) != 0){
+        //无固定大小
+        while (data_len > 0) {
+            //"Hello,World"
+            //"H\0\0\0e\0\0\0"
+            int end = findNull(data,data_len,shdr->EntSize);
+            if(end == -1){
+                fatal("string is not null terminated");
+            }
+
+            uint64_t sz = (uint64_t)end + shdr->EntSize;
+            char* substr = strndup(data, sz);
+
+            m->strs = realloc(m->strs, (m->strNum + 1) * sizeof(char*));
+            m->fragOffsets = realloc(m->fragOffsets, (m->fragOffsetNum + 1) * sizeof(uint32_t));
+
+            if (substr == NULL || m->strs == NULL || m->fragOffsets == NULL) {
+                fatal("null !\n");
+            }
+
+            m->strs[m->strNum] = substr;
+            m->fragOffsets[m->fragOffsetNum] = offset;
+
+            data += sz;
+            offset += sz;
+            data_len -= sz;
+
+            m->strNum++;m->fragOffsetNum++;
+        }
+    }else {
+        if (shdr->Size % shdr->EntSize != 0) {
+            fatal("section size is not multiple of entsize");
+        }
+
+        while (data_len > 0) {
+            char* substr = malloc((shdr->EntSize + 1) * sizeof(char));
+            strncpy(substr, data, shdr->EntSize);
+            //TODO 加不加
+            substr[shdr->EntSize] = '\0';
+
+            m->strs = realloc(m->strs, (m->strNum + 1) * sizeof(char*));
+            m->fragOffsets = realloc(m->fragOffsets, (m->fragOffsetNum + 1) * sizeof(uint32_t));
+
+            if (substr == NULL || m->strs == NULL || m->fragOffsets == NULL) {
+                fatal("null !\n");
+            }
+
+            m->strs[m->strNum] = substr;
+            m->fragOffsets[m->fragOffsetNum] = offset;
+
+            offset += shdr->EntSize;
+            data += shdr->EntSize;
+            data_len -= shdr->EntSize;
+            m->strNum++;m->fragOffsetNum++;
+        }
+    }
+    return m;
+}
 
 InputSection *GetSection(ObjectFile* o,Sym* esym,int idx){
     return o->Sections[GetShndx(o,esym,idx)];
@@ -183,5 +297,42 @@ void ClearSymbols(ObjectFile* o){
         Symbol *sym = o->inputFile->Symbols[i];
         if(sym->file == o)
             clear(sym);
+    }
+}
+
+void registerSectionPieces(ObjectFile* o){
+    for(int i=0; i< o->mergeableSectionsNum;i++){
+        MergeableSection * m = o->mergeableSections[i];
+        if(m == NULL)
+            continue;
+
+        m->fragments = (SectionFragment**) malloc(sizeof (SectionFragment*) * m->strNum);
+        m->fragmentNum = m->strNum;
+
+        for(int j = 0; j<m->strNum ;j++){
+            m->fragments[j] = Insert(m->parent,m->strs[j],m->p2align);
+        }
+    }
+
+    for(int i = 1;i<o->inputFile->symNum;i++){
+        Symbol *sym = o->inputFile->Symbols[i];
+        Sym *esym = &o->inputFile->ElfSyms[i];
+
+        if(IsAbs(esym) || IsUndef(esym) || IsCommon(esym))
+            continue;
+
+        MergeableSection *m = o->mergeableSections[GetShndx(o,esym,i)];
+        if(m == NULL)
+            continue;
+
+        uint32_t fragOffset;
+        SectionFragment *frag = GetFragment(m,esym->Val,&fragOffset);
+
+        if (frag == NULL) {
+            fatal("bad symbol value");
+        }
+
+        SetSectionFragment(sym,frag);
+        sym->value = fragOffset;
     }
 }

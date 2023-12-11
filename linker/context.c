@@ -13,6 +13,8 @@ Context* NewContext(){
     ctx->Args.LibraryPaths = NULL;
     ctx->ObjsCount = 0;
     ctx->Objs = NULL;
+    ctx->mergedSectionNum = 0;
+    ctx->mergedSections = NULL;
     return ctx;
 }
 
