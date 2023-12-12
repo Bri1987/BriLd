@@ -20,6 +20,9 @@ Context* NewContext(){
     ctx->chunkNum = 0;
     ctx->buf = NULL;
     ctx->ehdr = NULL;
+    ctx->shdr = NULL;
+    ctx->outputSections = NULL;
+    ctx->outputSecNum = 0;
     return ctx;
 }
 

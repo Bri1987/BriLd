@@ -1,5 +1,6 @@
 #include "merge.h"
 #include "output.h"
+#include "mergedSection.h"
 
 MergedSection *NewMergedSection(char* name , uint64_t flags , uint32_t typ){
     MergedSection *mergedSection = (MergedSection*) malloc(sizeof (MergedSection));

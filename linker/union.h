@@ -9,6 +9,8 @@ typedef struct ObjectFile_ ObjectFile;
 typedef struct InputSection_ InputSection;
 typedef struct InputFile_ InputFile;
 
+struct OutputSection_;
+
 typedef struct Symbol_{
     ObjectFile *file;
     char* name;
@@ -32,12 +34,16 @@ struct ObjectFile_{
 };
 
 struct InputSection_{
-    ObjectFile *objectFile;
+    struct ObjectFile_ *objectFile;
     char* contents;
     uint32_t shndx;    //在section header中的下标值
     uint32_t shsize;
     bool isAlive;      //看看这个inputsection是否放到最终可执行文件中
     uint8_t P2Align;
+
+    //在outputsection中的偏移
+    uint32_t  offset;
+    struct OutputSection_* outputSection;
 };
 
 struct InputFile_{
@@ -67,7 +73,7 @@ struct InputFile_{
 ObjectFile *NewObjectFile(File* file,bool isAlive);
 void Parse(Context *ctx,ObjectFile* o);
 void FillUpSymtabShndxSec(ObjectFile* o,Shdr* s);
-void InitializeSections(ObjectFile* o);
+void InitializeSections(ObjectFile* o,Context* ctx);
 void InitializeSymbols(Context *ctx,ObjectFile* o);
 void InitializeMergeableSections(ObjectFile * o,Context* ctx);
 MergeableSection *splitSection(Context* ctx,InputSection* isec);
@@ -81,9 +87,10 @@ void registerSectionPieces(ObjectFile* o);
 //-----------------------
 void AddObjectFile(ObjectFile*** Objs, int* ObjsCount, ObjectFile* newObj);
 //----------------inputsection
-InputSection *NewInputSection(ObjectFile* file,uint32_t shndx);
-Shdr *shdr_(InputSection* i);
-char* Name(InputSection* inputSection);
+InputSection *NewInputSection(Context *ctx,char* name,ObjectFile* file,uint32_t shndx);
+Shdr *shdr_(struct InputSection_* i);
+char* Name(struct InputSection_* inputSection);
+void WriteTo(struct InputSection_ *i,char* buf);
 
 Symbol *NewSymbol(char* name);
 Symbol *GetSymbolByName(Context* ctx,char* name);

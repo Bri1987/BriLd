@@ -2,7 +2,6 @@
 #define BRILINKER_MERGE_H
 
 #include "utils.h"
-#include "chunk.h"
 #include "context.h"
 
 typedef struct SectionFragment_ SectionFragment;
@@ -14,12 +13,6 @@ struct SectionFragment_ {
     uint32_t P2Align;
     bool IsAlive;
 } ;
-
-//合并后的section
-struct MergedSection_{
-    Chunk *chunk;
-    HashMap *map;    //string - sectionFragment
-};
 
 typedef struct MergeableSection{
     MergedSection * parent;

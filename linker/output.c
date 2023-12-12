@@ -1,6 +1,6 @@
 #include "output.h"
 
-const char* GetOutputName(char* name, uint64_t flags) {
+char* GetOutputName(char* name, uint64_t flags) {
     const char* prefixes_[] = {
             ".text.", ".data.rel.ro.", ".data.", ".rodata.", ".bss.rel.ro.", ".bss.",
             ".init_array.", ".fini_array.", ".tbss.", ".tdata.", ".gcc_except_table.",

@@ -9,6 +9,8 @@
 struct ObjectFile_;
 struct MergedSection_ ;
 struct OutputEhdr_;
+struct OutputShdr_;
+struct OutputSection_;
 struct Chunk_;
 
 typedef struct {
@@ -34,6 +36,9 @@ typedef struct {
     char* buf;
 
     struct OutputEhdr_* ehdr;
+    struct OutputShdr_* shdr;
+    struct OutputSection_** outputSections;
+    int outputSecNum;
 } Context;
 
 Context* NewContext();

@@ -537,6 +537,78 @@ linker/output.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/output.c.s
 .PHONY : linker/output.c.s
 
+linker/outputEhdr.o: linker/outputEhdr.c.o
+.PHONY : linker/outputEhdr.o
+
+# target to build an object file
+linker/outputEhdr.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputEhdr.c.o
+.PHONY : linker/outputEhdr.c.o
+
+linker/outputEhdr.i: linker/outputEhdr.c.i
+.PHONY : linker/outputEhdr.i
+
+# target to preprocess a source file
+linker/outputEhdr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputEhdr.c.i
+.PHONY : linker/outputEhdr.c.i
+
+linker/outputEhdr.s: linker/outputEhdr.c.s
+.PHONY : linker/outputEhdr.s
+
+# target to generate assembly for a file
+linker/outputEhdr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputEhdr.c.s
+.PHONY : linker/outputEhdr.c.s
+
+linker/outputSection.o: linker/outputSection.c.o
+.PHONY : linker/outputSection.o
+
+# target to build an object file
+linker/outputSection.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputSection.c.o
+.PHONY : linker/outputSection.c.o
+
+linker/outputSection.i: linker/outputSection.c.i
+.PHONY : linker/outputSection.i
+
+# target to preprocess a source file
+linker/outputSection.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputSection.c.i
+.PHONY : linker/outputSection.c.i
+
+linker/outputSection.s: linker/outputSection.c.s
+.PHONY : linker/outputSection.s
+
+# target to generate assembly for a file
+linker/outputSection.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputSection.c.s
+.PHONY : linker/outputSection.c.s
+
+linker/outputshdr.o: linker/outputshdr.c.o
+.PHONY : linker/outputshdr.o
+
+# target to build an object file
+linker/outputshdr.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputshdr.c.o
+.PHONY : linker/outputshdr.c.o
+
+linker/outputshdr.i: linker/outputshdr.c.i
+.PHONY : linker/outputshdr.i
+
+# target to preprocess a source file
+linker/outputshdr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputshdr.c.i
+.PHONY : linker/outputshdr.c.i
+
+linker/outputshdr.s: linker/outputshdr.c.s
+.PHONY : linker/outputshdr.s
+
+# target to generate assembly for a file
+linker/outputshdr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/outputshdr.c.s
+.PHONY : linker/outputshdr.c.s
+
 linker/passes.o: linker/passes.c.o
 .PHONY : linker/passes.o
 
@@ -717,6 +789,15 @@ help:
 	@echo "... linker/output.o"
 	@echo "... linker/output.i"
 	@echo "... linker/output.s"
+	@echo "... linker/outputEhdr.o"
+	@echo "... linker/outputEhdr.i"
+	@echo "... linker/outputEhdr.s"
+	@echo "... linker/outputSection.o"
+	@echo "... linker/outputSection.i"
+	@echo "... linker/outputSection.s"
+	@echo "... linker/outputshdr.o"
+	@echo "... linker/outputshdr.i"
+	@echo "... linker/outputshdr.s"
 	@echo "... linker/passes.o"
 	@echo "... linker/passes.i"
 	@echo "... linker/passes.s"

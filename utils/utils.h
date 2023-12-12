@@ -23,5 +23,6 @@ int endsWith(const char *str, const char *suffix);
 uint32_t hash(const char* str);
 void* convertHashToKey(uint32_t hashValue);
 uint64_t AlignTo(uint64_t val, uint64_t align);
+void Write(void* data, size_t dataSize, void* element);
 
 #endif //BRILD_UTIL_H

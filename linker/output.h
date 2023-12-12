@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-const char* GetOutputName(char* name, uint64_t flags);
+char* GetOutputName(char* name, uint64_t flags);
 
 
 #endif //BRILINKER_OUTPUT_H

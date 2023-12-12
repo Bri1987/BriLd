@@ -176,3 +176,7 @@ uint64_t AlignTo(uint64_t val, uint64_t align) {
 
     return (val + align - 1) & /*clear bit*/(~(align - 1));
 }
+
+void Write(void* data, size_t dataSize, void* element) {
+    memcpy(data, element, dataSize);
+}

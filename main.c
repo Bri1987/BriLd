@@ -3,6 +3,7 @@
 #include "elf_std.h"
 #include "input.h"
 #include "passes.h"
+#include "chunk.h"
 
 HashMap *name_map;
 
@@ -188,8 +189,16 @@ int main(int argc, char* argv[]) {
 //    }
     RegisterSectionPieces(ctx);
     CreateSyntheticSections(ctx);
+    BinSections(ctx);
+    CollectOutputSections(ctx);
+    ComputeSectionSizes(ctx);
 
-    uint64_t fileoff = GetFileSize(ctx);
+    for(int i=0; i<ctx->chunkNum;i++){
+        Chunk *c = ctx->chunk[i];
+        Update(c,ctx);
+    }
+
+    uint64_t fileoff = SetOutputSectionOffsets(ctx);
     printf("fileoff %lu\n",fileoff);
     ctx->buf = malloc(fileoff);
     //printf("%s\n",ctx->Args.Output);

@@ -1,4 +1,5 @@
 #include "union.h"
+#include "inputSection.h"
 
 extern HashMap *name_map;
 
@@ -22,7 +23,7 @@ void Parse(Context *ctx,ObjectFile* o){
         FillUpElfSyms(o->inputFile,o->SymtabSec);
         o->inputFile->SymbolStrtab = GetBytesFromIdx(o->inputFile,o->SymtabSec->Link);
     }
-    InitializeSections(o);
+    InitializeSections(o,ctx);
     InitializeSymbols(ctx,o);
     InitializeMergeableSections(o,ctx);
 }
@@ -60,12 +61,13 @@ void FillUpSymtabShndxSec(ObjectFile* o,Shdr* s){
     }
 }
 
-void InitializeSections(ObjectFile* o){
+void InitializeSections(ObjectFile* o,Context* ctx){
     o->Sections = (InputSection **)calloc(o->inputFile->sectionNum, sizeof(InputSection *));
     o->isecNum = o->inputFile->sectionNum;
 
     for (int i = 0; i < o->inputFile->sectionNum; ++i) {
         Shdr *shdr = &o->inputFile->ElfSections[i];
+        char* name = NULL;
         switch (shdr->Type) {
             //不需要放入可执行文件
             case SHT_GROUP:
@@ -80,7 +82,8 @@ void InitializeSections(ObjectFile* o){
                 FillUpSymtabShndxSec(o,shdr);
                 break;
             default:
-                o->Sections[i] = NewInputSection(o,i);
+                name = ElfGetName(o->inputFile->ShStrtab,shdr->Name);
+                o->Sections[i] = NewInputSection(ctx,name,o,i);
                 break;
         }
     }
