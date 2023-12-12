@@ -192,14 +192,22 @@ int main(int argc, char* argv[]) {
     BinSections(ctx);
     CollectOutputSections(ctx);
     ComputeSectionSizes(ctx);
+//    for(int i=0; i<ctx->chunkNum;i++) {
+//        Chunk *c = ctx->chunk[i];
+//        printf("i %d name %s , type %d\n",i,c->name,c->chunkType);
+//    }
+
+    SortOutputSections(ctx);
 
     for(int i=0; i<ctx->chunkNum;i++){
         Chunk *c = ctx->chunk[i];
+        printf("i %d name %s , type %d\n",i,c->name,c->chunkType);
         Update(c,ctx);
     }
 
     uint64_t fileoff = SetOutputSectionOffsets(ctx);
     printf("fileoff %lu\n",fileoff);
+
     ctx->buf = malloc(fileoff);
     //printf("%s\n",ctx->Args.Output);
     int file = open(ctx->Args.Output, O_RDWR | O_CREAT, 0777);

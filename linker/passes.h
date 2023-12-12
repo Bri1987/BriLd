@@ -15,5 +15,7 @@ uint64_t SetOutputSectionOffsets(Context* ctx);
 void BinSections(Context* ctx);
 void CollectOutputSections(Context* ctx);
 void ComputeSectionSizes(Context* ctx);
+void SortOutputSections(Context* ctx);
+bool isTbss(Chunk* chunk);
 
 #endif //BRILINKER_PASSES_H

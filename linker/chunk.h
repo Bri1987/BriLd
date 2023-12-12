@@ -17,14 +17,13 @@ typedef struct Chunk_{
     char* name;
     Shdr shdr;
     ChunkType chunkType;
+    int32_t rank;
 
-    union {
-        struct {
-            struct InputSection_** members;
-            int memberNum;
-            uint32_t idx;
-        }outpuSec;
-    };
+    struct {
+        struct InputSection_** members;
+        int memberNum;
+        uint32_t idx;
+    }outpuSec;
 }Chunk;
 
 typedef struct OutputEhdr_{

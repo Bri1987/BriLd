@@ -17,6 +17,12 @@ Chunk *NewChunk(){
     chunk->outpuSec.members = NULL;
     chunk->outpuSec.memberNum = 0;
     chunk->outpuSec.idx = 0;
+//     chunk->idx = 0;
+//     chunk->members = NULL;
+//     chunk->memberNum = 0;
+
+    chunk->rank = -1;
+    chunk->chunkType = 0;
     return chunk;
 }
 

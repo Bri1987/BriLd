@@ -1,4 +1,5 @@
 #include "passes.h"
+
 ObjectFile** RemoveIf(ObjectFile** elems, int* count) {
     int num = *count;
     size_t i = 0;
@@ -62,8 +63,38 @@ void RegisterSectionPieces(Context* ctx){
 }
 
 uint64_t SetOutputSectionOffsets(Context* ctx){
-    uint64_t fileoff = 0;
+    uint64_t addr = 0x200000;
     for(int i=0; i< ctx->chunkNum;i++){
+        Chunk *chunk = ctx->chunk[i];
+        if((GetShdr(chunk)->Flags & SHF_ALLOC) == 0)
+            continue;
+
+        addr = AlignTo(addr,GetShdr(chunk)->AddrAlign);
+        GetShdr(chunk)->Addr = addr;
+
+        if(!isTbss(chunk)){
+            addr += GetShdr(chunk)->Size;
+        }
+    }
+
+    size_t i = 0;
+    Chunk *first = ctx->chunk[0];
+
+    while (1) {
+        Shdr* shdr = GetShdr(ctx->chunk[i]);
+        shdr->Offset = shdr->Addr - GetShdr(first)->Addr;
+        i++;
+
+        if (i >= ctx->chunkNum ||
+                ((GetShdr(ctx->chunk[i])->Flags & SHF_ALLOC) == 0)) {
+            break;
+        }
+    }
+
+    Shdr *lastShdr = GetShdr(ctx->chunk[i-1]);
+    uint64_t fileoff = lastShdr->Offset + lastShdr->Size;
+
+    for(; i< ctx->chunkNum;i++){
         fileoff = AlignTo(fileoff,ctx->chunk[i]->shdr.AddrAlign);
         GetShdr(ctx->chunk[i])->Offset = fileoff;
         fileoff += ctx->chunk[i]->shdr.Size;
@@ -101,7 +132,6 @@ void BinSections(Context* ctx){
                 continue;
             }
 
-            //TODO 具体看看这个idx
             int64_t idx = isec->outputSection->chunk->outpuSec.idx;
             size_t prevSize = 0;
             if (group[idx] != NULL) {
@@ -133,7 +163,6 @@ void BinSections(Context* ctx){
 }
 
 void CollectOutputSections(Context* ctx){
-    //这里就直接加给ctx的chunk了，不知道行不行
     for(int i =0; i< ctx->outputSecNum;i++){
         OutputSection * osec = ctx->outputSections[i];
         if(osec->chunk->outpuSec.memberNum > 0){
@@ -161,4 +190,56 @@ void ComputeSectionSizes(Context* ctx){
         osec->chunk->shdr.Size = offset;
         osec->chunk->shdr.AddrAlign = 1 << p2align;
     }
+}
+
+int b2i(bool b){
+    if(b)
+        return 1;
+    return 0;
+}
+
+void getRank(Chunk *chunk,Context* ctx){
+    uint32_t typ = GetShdr(chunk)->Type;
+    uint32_t flags = GetShdr(chunk)->Flags;
+    if((flags & SHF_ALLOC) == 0)
+        chunk->rank = INT32_MAX - 1;
+    else if(chunk == ctx->shdr->chunk)
+        chunk->rank = INT32_MAX;
+    else if(chunk == ctx->ehdr->chunk)
+        chunk->rank = 0;
+    else if(typ == SHT_NOTE)
+        chunk->rank = 2;
+    else {
+        int writeable = b2i((flags & SHF_WRITE) != 0);
+        int notExec = b2i((flags & SHF_EXECINSTR) == 0);
+        int notTls = b2i((flags & SHF_TLS) == 0);
+        int isBss = b2i(typ == SHT_NOBITS);
+
+        chunk->rank = writeable << 7 | notExec << 6 | notTls << 5 | isBss << 4;
+    }
+    //printf("name %s , rank %d\n",chunk->name,chunk->rank);
+}
+
+void SortOutputSections(Context* ctx){
+    for(int i=0;i<ctx->chunkNum;i++){
+        getRank(ctx->chunk[i],ctx);
+    }
+
+    //qsort(ctx->chunk, ctx->chunkNum, sizeof(Chunk), compareChunks);
+    for (size_t i = 0; i < ctx->chunkNum - 1; i++) {
+        for (size_t j = 0; j < ctx->chunkNum - i - 1; j++) {
+            // 比较相邻的两个元素的 rank 值
+            if (ctx->chunk[j]->rank > ctx->chunk[j + 1]->rank) {
+                // 交换两个元素的位置
+                Chunk *temp = ctx->chunk[j];
+                ctx->chunk[j] = ctx->chunk[j + 1];
+                ctx->chunk[j + 1] = temp;
+            }
+        }
+    }
+}
+
+bool isTbss(Chunk* chunk){
+    Shdr *shdr = GetShdr(chunk);
+    return (shdr->Type == SHT_NOBITS) && ((shdr->Flags & SHF_TLS) !=0);
 }

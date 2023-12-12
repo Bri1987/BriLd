@@ -104,5 +104,6 @@ char* GetBytesFromIdx(InputFile* inputFile, int64_t idx);
 char* GetBytesFromShdr(InputFile* inputFile, Shdr* shdr);
 Shdr* FindSection(InputFile* f, uint32_t ty);
 void FillUpElfSyms(InputFile* inputFile,Shdr* s);
+Ehdr GetEhdr(InputFile* f);
 
 #endif //BRILINKER_UNION_H

@@ -85,3 +85,9 @@ void FillUpElfSyms(InputFile* inputFile,Shdr* s){
         numbs--;
     }
 }
+
+Ehdr GetEhdr(InputFile* f){
+    Ehdr ehdr;
+    Read(&ehdr,f->file->Contents,sizeof (Ehdr));
+    return ehdr;
+}
