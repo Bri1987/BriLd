@@ -7,7 +7,14 @@
 //合并后的section
 struct MergedSection_{
     Chunk *chunk;
-    HashMap *map;    //string - sectionFragment
 };
+
+typedef struct Fragment_ {
+    char* key;
+    SectionFragment* val;
+}Fragment;
+
+void AssignOffsets(MergedSection* m);
+void MergedSec_CopyBuf(Chunk* c,Context* ctx);
 
 #endif //BRILINKER_MERGEDSECTION_H

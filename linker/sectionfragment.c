@@ -5,6 +5,8 @@ SectionFragment* NewSectionFragment(MergedSection* m) {
     if (fragment != NULL) {
         fragment->OutputSection = m;
         fragment->Offset = UINT32_MAX;
+        fragment->P2Align = 0;
+        //TODO is alive的初始化
     }
     return fragment;
 }

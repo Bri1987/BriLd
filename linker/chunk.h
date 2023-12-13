@@ -6,12 +6,15 @@
 #include "utils.h"
 #include "union.h"
 
+#define max_(a, b) ((a) > (b) ? (a) : (b))
+
 typedef uint8_t ChunkType;
 #define ChunkTypeUnknown ((ChunkType)0)
 #define ChunkTypeEhdr ((ChunkType)1)
 #define ChunkTypeShdr ((ChunkType)2)
 #define ChunkTypePhdr ((ChunkType)3)
 #define ChunkTypeOutputSection ((ChunkType)4)
+#define ChunkTypeMergedSection ((ChunkType)5)
 
 typedef struct Chunk_{
     char* name;
@@ -24,6 +27,15 @@ typedef struct Chunk_{
         int memberNum;
         uint32_t idx;
     }outpuSec;
+
+    struct {
+        HashMap *map;    //string - sectionFragment
+    }mergedSec;
+
+    struct {
+        Phdr *phdrs;
+        int phdrNum;
+    }phdrS;
 }Chunk;
 
 typedef struct OutputEhdr_{
@@ -37,6 +49,10 @@ typedef struct OutputShdr_{
 typedef struct OutputSection_{
     Chunk * chunk;
 }OutputSection;
+
+typedef struct OutputPhdr_{
+    Chunk *chunk;
+}OutputPhdr;
 
 Chunk *NewChunk();
 Shdr *GetShdr(Chunk* c);
@@ -57,5 +73,10 @@ void Shdr_CopyBuf(Chunk* c,Context* ctx);
 OutputSection *GetOutputSection(Context* ctx,char* name,uint64_t typ,uint64_t flags);
 OutputSection *NewOutputSection(char* name,uint32_t typ, uint64_t flags, uint32_t idx);
 void OutputSec_CopyBuf(Chunk* c,Context* ctx);
+
+//-------------------phdr
+OutputPhdr *NewOutputPhdr();
+void Phdr_CopyBuf(Chunk* c,Context* ctx);
+void Phdr_UpdateShdr(Chunk* c,Context* ctx);
 
 #endif //BRILINKER_CHUNK_H

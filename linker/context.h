@@ -11,6 +11,7 @@ struct MergedSection_ ;
 struct OutputEhdr_;
 struct OutputShdr_;
 struct OutputSection_;
+struct OutputPhdr_;
 struct Chunk_;
 
 typedef struct {
@@ -37,8 +38,11 @@ typedef struct {
 
     struct OutputEhdr_* ehdr;
     struct OutputShdr_* shdr;
+    struct OutputPhdr_* phdr;
     struct OutputSection_** outputSections;
     int outputSecNum;
+
+    uint64_t TpAddr;
 } Context;
 
 Context* NewContext();

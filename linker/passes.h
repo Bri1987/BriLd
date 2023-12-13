@@ -3,7 +3,7 @@
 #define BRILINKER_PASSES_H
 
 #include "union.h"
-#include "chunk.h"
+#include "mergedSection.h"
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
@@ -17,5 +17,6 @@ void CollectOutputSections(Context* ctx);
 void ComputeSectionSizes(Context* ctx);
 void SortOutputSections(Context* ctx);
 bool isTbss(Chunk* chunk);
+void ComputeMergedSectionSizes(Context* ctx);
 
 #endif //BRILINKER_PASSES_H

@@ -1,4 +1,5 @@
-#include "chunk.h"
+//#include "chunk.h"
+#include "mergedSection.h"
 
 Chunk *NewChunk(){
     Chunk *chunk = (Chunk*) malloc(sizeof (Chunk));
@@ -13,6 +14,7 @@ Chunk *NewChunk(){
     chunk->shdr.Info = 0;
     chunk->shdr.Flags = 0;
     chunk->chunkType  = 0;
+    chunk->name = NULL;
 
     chunk->outpuSec.members = NULL;
     chunk->outpuSec.memberNum = 0;
@@ -20,6 +22,9 @@ Chunk *NewChunk(){
 //     chunk->idx = 0;
 //     chunk->members = NULL;
 //     chunk->memberNum = 0;
+    chunk->mergedSec.map = HashMapInit();
+    chunk->phdrS.phdrNum = 0;
+    chunk->phdrS.phdrs = NULL;
 
     chunk->rank = -1;
     chunk->chunkType = 0;
@@ -37,6 +42,10 @@ void CopyBuf(Chunk* c,Context* ctx){
         Shdr_CopyBuf(c,ctx);
     else if(c->chunkType == ChunkTypeOutputSection)
         OutputSec_CopyBuf(c,ctx);
+    else if(c->chunkType == ChunkTypeMergedSection)
+        MergedSec_CopyBuf(c,ctx);
+    else if(c->chunkType == ChunkTypePhdr)
+        Phdr_CopyBuf(c,ctx);
 }
 
 void Update(Chunk* c,Context* ctx){
@@ -45,6 +54,10 @@ void Update(Chunk* c,Context* ctx){
     else if(c->chunkType == ChunkTypeShdr)
         Shdr_UpdateShdr(c,ctx);
     else if(c->chunkType == ChunkTypeOutputSection)
+        ;
+    else if(c->chunkType == ChunkTypePhdr)
+        Phdr_UpdateShdr(c,ctx);
+    else if(c->chunkType == ChunkTypeMergedSection)
         ;
 }
 

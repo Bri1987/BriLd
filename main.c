@@ -6,6 +6,7 @@
 #include "chunk.h"
 
 HashMap *name_map;
+HashMap *mergedMap;
 
 char** dashes(const char* name) {
     // 分配足够的内存来存储带有单破折号和双破折号的参数
@@ -145,6 +146,7 @@ int main(int argc, char* argv[]) {
 //    }
 
     //name_map = HashMapInit();
+    mergedMap = HashMapInit();
     Context *ctx = NewContext();
     char **remaining = parseArgs(argc,argv,ctx);
 
@@ -188,6 +190,7 @@ int main(int argc, char* argv[]) {
 //        printf("%s\n",ctx->Objs[i]->inputFile->file->Name);
 //    }
     RegisterSectionPieces(ctx);
+    ComputeMergedSectionSizes(ctx);
     CreateSyntheticSections(ctx);
     BinSections(ctx);
     CollectOutputSections(ctx);

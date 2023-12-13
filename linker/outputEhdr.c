@@ -47,11 +47,11 @@ void Ehdr_CopyBuf(Chunk *c,Context* ctx){
     ehdr->Version = EV_CURRENT;
     ehdr->Entry = getEntryAddr(ctx);
     ehdr->ShOff = ctx->shdr->chunk->shdr.Offset;
-    //TODO
+    ehdr->PhOff = ctx->phdr->chunk->shdr.Offset;
     ehdr->Flags = getFlags(ctx);
     ehdr->EhSize = sizeof (Ehdr);
     ehdr->PhEntSize = sizeof (Phdr);
-    //TODO
+    ehdr->PhNum = ctx->phdr->chunk->shdr.Size / sizeof (Phdr);
     ehdr->ShEntSize = sizeof(Shdr);
     ehdr->ShNum = ctx->shdr->chunk->shdr.Size / sizeof (Shdr);
     ehdr->ShStrndx = 0;

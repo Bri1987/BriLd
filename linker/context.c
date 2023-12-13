@@ -21,8 +21,10 @@ Context* NewContext(){
     ctx->buf = NULL;
     ctx->ehdr = NULL;
     ctx->shdr = NULL;
+    ctx->phdr = NULL;
     ctx->outputSections = NULL;
     ctx->outputSecNum = 0;
+    ctx->TpAddr = 0;
     return ctx;
 }
 

@@ -1,5 +1,5 @@
 #include "passes.h"
-
+extern HashMap *mergedMap;
 ObjectFile** RemoveIf(ObjectFile** elems, int* count) {
     int num = *count;
     size_t i = 0;
@@ -99,6 +99,8 @@ uint64_t SetOutputSectionOffsets(Context* ctx){
         GetShdr(ctx->chunk[i])->Offset = fileoff;
         fileoff += ctx->chunk[i]->shdr.Size;
     }
+
+    Phdr_UpdateShdr(ctx->phdr->chunk,ctx);
     return fileoff;
 }
 
@@ -113,6 +115,12 @@ void CreateSyntheticSections(Context* ctx){
     ctx->shdr = outputShdr;
     ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
     ctx->chunk[ctx->chunkNum] = outputShdr->chunk;
+    ctx->chunkNum++;
+
+    struct OutputPhdr_* outputPhdr = NewOutputPhdr();
+    ctx->phdr = outputPhdr;
+    ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
+    ctx->chunk[ctx->chunkNum] = outputPhdr->chunk;
     ctx->chunkNum++;
 }
 
@@ -171,6 +179,16 @@ void CollectOutputSections(Context* ctx){
             ctx->chunkNum++;
         }
     }
+
+    for(int i=0; i<ctx->mergedSectionNum;i++){
+        MergedSection *m = ctx->mergedSections[i];
+        if(m->chunk->shdr.Size > 0){
+            //printf("n %s , size %lu\n",m->chunk->name,m->chunk->shdr.Size);
+            ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum + 1));
+            ctx->chunk[ctx->chunkNum] = m->chunk;
+            ctx->chunkNum++;
+        }
+    }
 }
 
 void ComputeSectionSizes(Context* ctx){
@@ -207,6 +225,8 @@ void getRank(Chunk *chunk,Context* ctx){
         chunk->rank = INT32_MAX;
     else if(chunk == ctx->ehdr->chunk)
         chunk->rank = 0;
+    else if(chunk == ctx->phdr->chunk)
+        chunk->rank = 1;
     else if(typ == SHT_NOTE)
         chunk->rank = 2;
     else {
@@ -242,4 +262,11 @@ void SortOutputSections(Context* ctx){
 bool isTbss(Chunk* chunk){
     Shdr *shdr = GetShdr(chunk);
     return (shdr->Type == SHT_NOBITS) && ((shdr->Flags & SHF_TLS) !=0);
+}
+
+void ComputeMergedSectionSizes(Context* ctx){
+    for(int i=0;i<ctx->mergedSectionNum;i++){
+        MergedSection *m = ctx->mergedSections[i];
+        AssignOffsets(m);
+    }
 }

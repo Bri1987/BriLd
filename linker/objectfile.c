@@ -1,8 +1,6 @@
 #include "union.h"
 #include "inputSection.h"
 
-extern HashMap *name_map;
-
 ObjectFile *NewObjectFile(File* file,bool isAlive){
     ObjectFile *objectFile = (ObjectFile*) malloc(sizeof (ObjectFile));
     objectFile->inputFile = NewInputFile(file);
