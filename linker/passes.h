@@ -18,5 +18,6 @@ void ComputeSectionSizes(Context* ctx);
 void SortOutputSections(Context* ctx);
 bool isTbss(Chunk* chunk);
 void ComputeMergedSectionSizes(Context* ctx);
+void ScanRelocations(Context* ctx);
 
 #endif //BRILINKER_PASSES_H

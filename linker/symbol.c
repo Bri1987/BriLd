@@ -1,4 +1,4 @@
-#include "union.h"
+#include "chunk.h"
 
 Symbol *NewSymbol(char* name){
 //    Symbol *symbol = (Symbol*) malloc(sizeof (Symbol));
@@ -15,6 +15,8 @@ Symbol *NewSymbol(char* name){
     symbol->inputSection = NULL;
     symbol->value = 0;
     symbol->sectionFragment = NULL;
+    symbol->flags = 0;
+    symbol->gotTpIdx = 0;
     return symbol;
 }
 
@@ -46,6 +48,20 @@ void clear(Symbol* s){
     s->file = NULL;
     s->symIdx = -1;
     s->inputSection = NULL;
+    s->sectionFragment = NULL;
     //TODO name制空吗
 }
 
+uint64_t Symbol_GetAddr(Symbol* s){
+    if(s->sectionFragment != NULL)
+        return SectionFragment_GetAddr(s->sectionFragment) + s->value;
+
+    if(s->inputSection != NULL)
+        return InputSec_GetAddr(s->inputSection) + s->value;
+
+    return s->value;
+}
+
+uint64_t GetGotTpAddr(Context* ctx,Symbol* s){
+    return ctx->got->chunk->shdr.Addr + s->gotTpIdx * 8;
+}

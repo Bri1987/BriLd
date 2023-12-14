@@ -19,21 +19,26 @@ char* GetOutputName(char* name, uint64_t flags) {
     for (size_t i = 0; i < prefixesCount; i++) {
         const char* prefix = prefixes_[i];
         size_t prefixLength = strlen(prefix);
-        const char* stem = prefix;
+        char* stem = malloc(strlen(prefix));
+        strncpy(stem,prefix, strlen(prefix)-1);
+        stem[strlen(prefix) - 1] = '\0';
 
         if (prefixLength > 0) {
             prefixLength--;
             if (strcmp(name, stem) == 0 || strncmp(name, prefix, prefixLength) == 0) {
+               // printf("_stem %s\n",stem);
                 return stem;
             }
         } else {
             //prefixLength = 0
-            printf("prefixLength : %zu\n",prefixLength);
+            //printf("prefixLength : %zu\n",prefixLength);
             if (strcmp(name, stem) == 0) {
+               // printf("_stem %s\n",stem);
                 return stem;
             }
         }
     }
 
+   // printf("_name %s\n",name);
     return name;
 }

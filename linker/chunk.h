@@ -15,6 +15,7 @@ typedef uint8_t ChunkType;
 #define ChunkTypePhdr ((ChunkType)3)
 #define ChunkTypeOutputSection ((ChunkType)4)
 #define ChunkTypeMergedSection ((ChunkType)5)
+#define ChunkTypeGotSection ((ChunkType)6)
 
 typedef struct Chunk_{
     char* name;
@@ -36,6 +37,11 @@ typedef struct Chunk_{
         Phdr *phdrs;
         int phdrNum;
     }phdrS;
+
+    struct {
+        Symbol ** GotTpSyms;
+        int TpSymNum;
+    }gotSec;
 }Chunk;
 
 typedef struct OutputEhdr_{
@@ -53,6 +59,15 @@ typedef struct OutputSection_{
 typedef struct OutputPhdr_{
     Chunk *chunk;
 }OutputPhdr;
+
+typedef struct GotSection_{
+    Chunk *chunk;
+}GotSection;
+
+typedef struct GotEntry_{
+    int64_t idx;
+    uint64_t val;
+}GotEntry;
 
 Chunk *NewChunk();
 Shdr *GetShdr(Chunk* c);
@@ -78,5 +93,11 @@ void OutputSec_CopyBuf(Chunk* c,Context* ctx);
 OutputPhdr *NewOutputPhdr();
 void Phdr_CopyBuf(Chunk* c,Context* ctx);
 void Phdr_UpdateShdr(Chunk* c,Context* ctx);
+
+//-------------------got section
+GotSection *NewGotSection();
+void AddGotTpSymbol(Chunk* chunk, Symbol* sym);
+void GotSec_CopyBuf(Chunk* c,Context* ctx);
+GotEntry *GetEntries(Chunk *chunk,Context* ctx,int* num);
 
 #endif //BRILINKER_CHUNK_H

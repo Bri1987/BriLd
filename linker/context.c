@@ -25,6 +25,7 @@ Context* NewContext(){
     ctx->outputSections = NULL;
     ctx->outputSecNum = 0;
     ctx->TpAddr = 0;
+    ctx->got = NULL;
     return ctx;
 }
 

@@ -20,6 +20,9 @@ typedef struct Symbol_{
     //union
     InputSection * inputSection;
     SectionFragment *sectionFragment;
+
+    int32_t gotTpIdx;
+    uint32_t flags;
 }Symbol;
 
 
@@ -44,6 +47,10 @@ struct InputSection_{
     //在outputsection中的偏移
     uint32_t  offset;
     struct OutputSection_* outputSection;
+
+    uint32_t RelsecIdx;
+    Rela* rels;
+    int relNum;
 };
 
 struct InputFile_{
@@ -83,6 +90,8 @@ void ResolveSymbols(ObjectFile* o);
 void markLiveObjs(ObjectFile* o,ObjectFile*** roots,int *rootSize);
 void ClearSymbols(ObjectFile* o);
 void registerSectionPieces(ObjectFile* o);
+void SkipEhframeSections(ObjectFile* o);
+void ScanRelocations_(ObjectFile* o);
 
 //-----------------------
 void AddObjectFile(ObjectFile*** Objs, int* ObjsCount, ObjectFile* newObj);
@@ -90,7 +99,17 @@ void AddObjectFile(ObjectFile*** Objs, int* ObjsCount, ObjectFile* newObj);
 InputSection *NewInputSection(Context *ctx,char* name,ObjectFile* file,uint32_t shndx);
 Shdr *shdr_(struct InputSection_* i);
 char* Name(struct InputSection_* inputSection);
-void WriteTo(struct InputSection_ *i,char* buf);
+void WriteTo(struct InputSection_ *i,char* buf,Context* ctx);
+Rela *GetRels(InputSection* i);
+uint64_t InputSec_GetAddr(InputSection* i);
+void ScanRelocations__(InputSection* isec);
+void ApplyRelocAlloc(InputSection* i,Context* ctx,char* buf);
+void writeItype(void* loc, uint32_t val);
+void writeStype(void* loc, uint32_t val);
+void writeBtype(void* loc, uint32_t val);
+void writeUtype(void* loc, uint32_t val);
+void writeJtype(void* loc, uint32_t val);
+void setRs1(void* loc,uint32_t rs1);
 
 Symbol *NewSymbol(char* name);
 Symbol *GetSymbolByName(Context* ctx,char* name);
@@ -98,6 +117,8 @@ void SetInputSection(Symbol *s,InputSection* isec);
 void SetSectionFragment(Symbol* s,SectionFragment* frag);
 Sym *ElfSym_(Symbol* s);
 void clear(Symbol* s);
+uint64_t Symbol_GetAddr(Symbol* s);
+uint64_t GetGotTpAddr(Context* ctx,Symbol* s);
 
 InputFile* NewInputFile(File* file);
 char* GetBytesFromIdx(InputFile* inputFile, int64_t idx);

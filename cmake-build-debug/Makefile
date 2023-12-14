@@ -369,6 +369,30 @@ linker/filetype.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/filetype.c.s
 .PHONY : linker/filetype.c.s
 
+linker/gotsection.o: linker/gotsection.c.o
+.PHONY : linker/gotsection.o
+
+# target to build an object file
+linker/gotsection.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/gotsection.c.o
+.PHONY : linker/gotsection.c.o
+
+linker/gotsection.i: linker/gotsection.c.i
+.PHONY : linker/gotsection.i
+
+# target to preprocess a source file
+linker/gotsection.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/gotsection.c.i
+.PHONY : linker/gotsection.c.i
+
+linker/gotsection.s: linker/gotsection.c.s
+.PHONY : linker/gotsection.s
+
+# target to generate assembly for a file
+linker/gotsection.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ld.dir/build.make CMakeFiles/ld.dir/linker/gotsection.c.s
+.PHONY : linker/gotsection.c.s
+
 linker/input.o: linker/input.c.o
 .PHONY : linker/input.o
 
@@ -792,6 +816,9 @@ help:
 	@echo "... linker/filetype.o"
 	@echo "... linker/filetype.i"
 	@echo "... linker/filetype.s"
+	@echo "... linker/gotsection.o"
+	@echo "... linker/gotsection.i"
+	@echo "... linker/gotsection.s"
 	@echo "... linker/input.o"
 	@echo "... linker/input.i"
 	@echo "... linker/input.s"

@@ -25,4 +25,8 @@ void* convertHashToKey(uint32_t hashValue);
 uint64_t AlignTo(uint64_t val, uint64_t align);
 void Write(void* data, size_t dataSize, void* element);
 
+uint32_t Bit_32(uint32_t val, int pos);
+uint32_t Bits_32(uint32_t val, uint32_t hi, uint32_t lo);
+uint64_t SignExtend(uint64_t val,int size);
+
 #endif //BRILD_UTIL_H

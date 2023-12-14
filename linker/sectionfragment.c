@@ -1,4 +1,5 @@
 #include "merge.h"
+#include "mergedSection.h"
 
 SectionFragment* NewSectionFragment(MergedSection* m) {
     SectionFragment* fragment = (SectionFragment*)malloc(sizeof(SectionFragment));
@@ -7,10 +8,12 @@ SectionFragment* NewSectionFragment(MergedSection* m) {
         fragment->Offset = UINT32_MAX;
         fragment->P2Align = 0;
         //TODO is alive的初始化
+        fragment->strslen = 0;
     }
     return fragment;
 }
 
-//uint64_t SectionFragment_GetAddr(const SectionFragment* s) {
-//    return s->OutputSection->Shdr.Addr + (uint64_t)(s->Offset);
-//}
+uint64_t SectionFragment_GetAddr(SectionFragment* s) {
+    //printf("offset %ld\n",s->OutputSection->chunk->shdr.Addr + s->Offset);
+    return s->OutputSection->chunk->shdr.Addr + s->Offset;
+}

@@ -1,5 +1,4 @@
 #include "union.h"
-#include "inputSection.h"
 
 ObjectFile *NewObjectFile(File* file,bool isAlive){
     ObjectFile *objectFile = (ObjectFile*) malloc(sizeof (ObjectFile));
@@ -24,6 +23,7 @@ void Parse(Context *ctx,ObjectFile* o){
     InitializeSections(o,ctx);
     InitializeSymbols(ctx,o);
     InitializeMergeableSections(o,ctx);
+    SkipEhframeSections(o);
 }
 
 // 添加 ObjectFile 到 Objs 数组
@@ -85,6 +85,19 @@ void InitializeSections(ObjectFile* o,Context* ctx){
                 break;
         }
     }
+
+    for(int i=0; i< o->inputFile->sectionNum;i++){
+        Shdr *shdr = &o->inputFile->ElfSections[i];
+        if(shdr->Type != SHT_RELA)
+            continue;
+
+        assert(shdr->Info < o->isecNum);
+        InputSection *target = o->Sections[shdr->Info];
+        if(target != NULL){
+            assert(target->RelsecIdx == UINT32_MAX);
+            target->RelsecIdx = i;
+        }
+    }
 }
 
 int64_t GetShndx(ObjectFile* o, Sym* esym, int idx) {
@@ -124,6 +137,7 @@ void InitializeSymbols(Context *ctx,ObjectFile* o){
     o->inputFile->Symbols = (Symbol **)calloc(o->inputFile->symNum, sizeof(Symbol *));
     for (int i = 0; i < o->inputFile->symNum; ++i) {
         o->inputFile->Symbols[i] = (Symbol*) malloc(sizeof (Symbol));
+        o->inputFile->numSymbols++;
     }
     for(int i=0;i<o->inputFile->FirstGlobal;i++){
         o->inputFile->Symbols[i] = &o->inputFile->LocalSymbols[i];
@@ -198,8 +212,13 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
             }
 
             uint64_t sz = (uint64_t)end + shdr->EntSize;
-            char* substr = strndup(data, sz);
+            //char* substr = strndup(data, sz);
+            char* substr = malloc(sz +1);
+            memcpy(substr,data,sz);
+            substr[sz] = '\0';
+            //printBytes(substr,sz);
 
+            m->strslen = realloc(m->strslen,sizeof (int) * (m->strNum + 1));
             m->strs = realloc(m->strs, (m->strNum + 1) * sizeof(char*));
             m->fragOffsets = realloc(m->fragOffsets, (m->fragOffsetNum + 1) * sizeof(uint32_t));
 
@@ -208,6 +227,7 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
             }
 
             m->strs[m->strNum] = substr;
+            m->strslen[m->strNum] = sz;
             m->fragOffsets[m->fragOffsetNum] = offset;
 
             data += sz;
@@ -223,10 +243,12 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
 
         while (data_len > 0) {
             char* substr = malloc((shdr->EntSize + 1) * sizeof(char));
-            strncpy(substr, data, shdr->EntSize);
+            //strncpy(substr, data, shdr->EntSize);
+            memcpy(substr, data, shdr->EntSize);
             //TODO 加不加
             substr[shdr->EntSize] = '\0';
 
+            m->strslen = realloc(m->strslen,sizeof (int) * (m->strNum + 1));
             m->strs = realloc(m->strs, (m->strNum + 1) * sizeof(char*));
             m->fragOffsets = realloc(m->fragOffsets, (m->fragOffsetNum + 1) * sizeof(uint32_t));
 
@@ -236,6 +258,7 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
 
             m->strs[m->strNum] = substr;
             m->fragOffsets[m->fragOffsetNum] = offset;
+            m->strslen[m->strNum] = shdr->EntSize;
 
             offset += shdr->EntSize;
             data += shdr->EntSize;
@@ -302,6 +325,7 @@ void ClearSymbols(ObjectFile* o){
 }
 
 void registerSectionPieces(ObjectFile* o){
+    //printf("new obj num %zu\n",o->mergeableSectionsNum);
     for(int i=0; i< o->mergeableSectionsNum;i++){
         MergeableSection * m = o->mergeableSections[i];
         if(m == NULL)
@@ -310,9 +334,12 @@ void registerSectionPieces(ObjectFile* o){
         m->fragments = (SectionFragment**) malloc(sizeof (SectionFragment*) * m->strNum);
         m->fragmentNum = m->strNum;
 
+//        printf("same m1\n");
+//        printf("addr %p\n",(void*)m->parent);
         for(int j = 0; j<m->strNum ;j++){
-            m->fragments[j] = Insert(m->parent,m->strs[j],m->p2align);
+            m->fragments[j] = Insert(m->parent,m->strs[j],m->p2align,m->strslen[j]);
         }
+        //printf("same m2\n");
     }
 
     for(int i = 1;i<o->inputFile->symNum;i++){
@@ -335,5 +362,24 @@ void registerSectionPieces(ObjectFile* o){
 
         SetSectionFragment(sym,frag);
         sym->value = fragOffset;
+    }
+}
+
+void SkipEhframeSections(ObjectFile* o){
+    for(int i=0;i < o->isecNum;i++){
+        InputSection *isec = o->Sections[i];
+        if(isec != NULL && isec->isAlive && strcmp(Name(isec),".eh_frame")==0){
+            isec->isAlive = false;
+        }
+    }
+}
+
+void ScanRelocations_(ObjectFile* o){
+    for(int i=0;i < o->isecNum;i++) {
+        InputSection *isec = o->Sections[i];
+        if(isec != NULL && isec->isAlive && (shdr_(isec)->Flags & SHF_ALLOC) != 0){
+            ScanRelocations__(isec);
+        }
+       // printf("hi!\n");
     }
 }

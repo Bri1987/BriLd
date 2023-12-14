@@ -180,3 +180,15 @@ uint64_t AlignTo(uint64_t val, uint64_t align) {
 void Write(void* data, size_t dataSize, void* element) {
     memcpy(data, element, dataSize);
 }
+
+uint32_t Bit_32(uint32_t val, int pos) {
+    return (val >> pos) & 1;
+}
+
+uint32_t Bits_32(uint32_t val, uint32_t hi, uint32_t lo) {
+    return (val >> lo) & ((1 << (hi - lo + 1)) - 1);
+}
+
+uint64_t SignExtend(uint64_t val,int size){
+    return (uint64_t)((int64_t)(val << (63 - size)) >> (63-size));
+}

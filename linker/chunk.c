@@ -25,9 +25,12 @@ Chunk *NewChunk(){
     chunk->mergedSec.map = HashMapInit();
     chunk->phdrS.phdrNum = 0;
     chunk->phdrS.phdrs = NULL;
+    chunk->gotSec.GotTpSyms = NULL;
+    chunk->gotSec.TpSymNum = 0;
 
     chunk->rank = -1;
     chunk->chunkType = 0;
+
     return chunk;
 }
 
@@ -46,6 +49,8 @@ void CopyBuf(Chunk* c,Context* ctx){
         MergedSec_CopyBuf(c,ctx);
     else if(c->chunkType == ChunkTypePhdr)
         Phdr_CopyBuf(c,ctx);
+    else if(c->chunkType == ChunkTypeGotSection)
+        GotSec_CopyBuf(c,ctx);
 }
 
 void Update(Chunk* c,Context* ctx){

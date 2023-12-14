@@ -58,5 +58,6 @@ void Ehdr_CopyBuf(Chunk *c,Context* ctx){
 
     char* buf = malloc(sizeof (Ehdr));
     memcpy(buf,ehdr,sizeof (Ehdr));
+   // printf("ehdr offset %lu\n",c->shdr.Offset);
     memcpy(ctx->buf+c->shdr.Offset,buf,sizeof (Ehdr));
 }

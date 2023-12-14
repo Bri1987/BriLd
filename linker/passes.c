@@ -1,5 +1,4 @@
 #include "passes.h"
-extern HashMap *mergedMap;
 ObjectFile** RemoveIf(ObjectFile** elems, int* count) {
     int num = *count;
     size_t i = 0;
@@ -111,16 +110,22 @@ void CreateSyntheticSections(Context* ctx){
     ctx->chunk[ctx->chunkNum] = outputEhdr->chunk;
     ctx->chunkNum++;
 
+    struct OutputPhdr_* outputPhdr = NewOutputPhdr();
+    ctx->phdr = outputPhdr;
+    ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
+    ctx->chunk[ctx->chunkNum] = outputPhdr->chunk;
+    ctx->chunkNum++;
+
     struct OutputShdr_* outputShdr = NewOutputShdr();
     ctx->shdr = outputShdr;
     ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
     ctx->chunk[ctx->chunkNum] = outputShdr->chunk;
     ctx->chunkNum++;
 
-    struct OutputPhdr_* outputPhdr = NewOutputPhdr();
-    ctx->phdr = outputPhdr;
+    struct GotSection_ *gotSec = NewGotSection();
+    ctx->got = gotSec;
     ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum+1));
-    ctx->chunk[ctx->chunkNum] = outputPhdr->chunk;
+    ctx->chunk[ctx->chunkNum] = gotSec->chunk;
     ctx->chunkNum++;
 }
 
@@ -174,6 +179,7 @@ void CollectOutputSections(Context* ctx){
     for(int i =0; i< ctx->outputSecNum;i++){
         OutputSection * osec = ctx->outputSections[i];
         if(osec->chunk->outpuSec.memberNum > 0){
+           // printf("n1 %s , size %lu\n",osec->chunk->name,osec->chunk->shdr.Size);
             ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum + 1));
             ctx->chunk[ctx->chunkNum] = osec->chunk;
             ctx->chunkNum++;
@@ -183,7 +189,7 @@ void CollectOutputSections(Context* ctx){
     for(int i=0; i<ctx->mergedSectionNum;i++){
         MergedSection *m = ctx->mergedSections[i];
         if(m->chunk->shdr.Size > 0){
-            //printf("n %s , size %lu\n",m->chunk->name,m->chunk->shdr.Size);
+           // printf("n2 %s , size %lu\n",m->chunk->name,m->chunk->shdr.Size);
             ctx->chunk = realloc(ctx->chunk,sizeof (Chunk*) * (ctx->chunkNum + 1));
             ctx->chunk[ctx->chunkNum] = m->chunk;
             ctx->chunkNum++;
@@ -201,6 +207,7 @@ void ComputeSectionSizes(Context* ctx){
             InputSection *isec = osec->chunk->outpuSec.members[j];
             offset = AlignTo(offset, 1<<isec->P2Align);
             isec->offset = offset;
+          //  printf("__offset %lu\n",offset);
             offset += isec->shsize;
             p2align = max(p2align,isec->P2Align);
         }
@@ -268,5 +275,38 @@ void ComputeMergedSectionSizes(Context* ctx){
     for(int i=0;i<ctx->mergedSectionNum;i++){
         MergedSection *m = ctx->mergedSections[i];
         AssignOffsets(m);
+    }
+}
+
+void ScanRelocations(Context* ctx){
+    for(int i=0; i< ctx->ObjsCount;i++){
+        ScanRelocations_(ctx->Objs[i]);
+    }
+
+    Symbol **syms = NULL;
+    int numSyms = 0;
+    int count =0;
+    for(int i=0; i< ctx->ObjsCount;i++){
+        ObjectFile *file = ctx->Objs[i];
+       // printf("numSymbols %ld\n",file->inputFile->numSymbols);
+        for(int j=0;j<file->inputFile->numSymbols;j++){
+            Symbol *sym = file->inputFile->Symbols[j];
+            if(sym->flags != 0)
+                count++;
+            if(sym->file == file && sym->flags!=0){
+                syms = (Symbol**) realloc(syms,sizeof (Symbol*) * (numSyms+1));
+                syms[numSyms] = sym;
+                numSyms++;
+            }
+        }
+    }
+
+    for(int i=0; i<numSyms;i++){
+        Symbol *sym = syms[i];
+        if((sym->flags & 1) != 0){
+            AddGotTpSymbol(ctx->got->chunk,sym);
+        }
+
+        sym->flags = 0;
     }
 }

@@ -16,21 +16,8 @@ void WriteMagic(uint8_t * contents) {
     memcpy(contents, magic, magicSize);
 }
 
-//char* checkNameExists(char* strTab, uint32_t offset){
-//    uint32_t hashKey = hash(strTab,offset);
-//    char* key_ = convertHashToKey(hashKey);
-//
-//    if(HashMapContain(name_map,key_))
-//        return HashMapGet(name_map,key_);
-//
-//    return NULL;
-//}
 
 char* ElfGetName(char* strTab, uint32_t offset) {
-//    char* res;
-//    if(HashMapSize(name_map) > 0 && (res = checkNameExists(strTab,offset)) != NULL){
-//        return res;
-//    }
     uint32_t length = 0;
     while (strTab[offset + length] != '\0') {
         length++;

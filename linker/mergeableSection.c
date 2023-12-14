@@ -9,6 +9,7 @@ MergeableSection *NewMergeableSection(){
     mergeableSection->parent = NULL;
     mergeableSection->strs = NULL;
     mergeableSection->strNum = 0;
+    mergeableSection->strslen = NULL;
     mergeableSection->fragOffsetNum = 0;
     return mergeableSection;
 }

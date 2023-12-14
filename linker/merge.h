@@ -12,6 +12,7 @@ struct SectionFragment_ {
     uint32_t Offset;      //在section中的offset
     uint32_t P2Align;
     bool IsAlive;
+    int strslen;
 } ;
 
 typedef struct MergeableSection{
@@ -19,6 +20,7 @@ typedef struct MergeableSection{
     uint8_t p2align;
     char** strs;
     int strNum;
+    int* strslen;
     uint32_t* fragOffsets;
     int fragOffsetNum;
     SectionFragment ** fragments;
@@ -27,12 +29,12 @@ typedef struct MergeableSection{
 
 //SectionFragment
 SectionFragment* NewSectionFragment(MergedSection* m);
-uint64_t SectionFragment_GetAddr(const SectionFragment* s);
+uint64_t SectionFragment_GetAddr(SectionFragment* s);
 
 //mergedSection
 MergedSection *NewMergedSection(char* name , uint64_t flags , uint32_t typ);
 MergedSection *GetMergedSectionInstance(Context* ctx, char* name,uint32_t typ,uint64_t flags);
-SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align);
+SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align,int strslen);
 
 //mergeableSection
 MergeableSection *NewMergeableSection();

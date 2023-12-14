@@ -12,6 +12,7 @@ struct OutputEhdr_;
 struct OutputShdr_;
 struct OutputSection_;
 struct OutputPhdr_;
+struct GotSection_;
 struct Chunk_;
 
 typedef struct {
@@ -39,6 +40,7 @@ typedef struct {
     struct OutputEhdr_* ehdr;
     struct OutputShdr_* shdr;
     struct OutputPhdr_* phdr;
+    struct GotSection_* got;
     struct OutputSection_** outputSections;
     int outputSecNum;
 

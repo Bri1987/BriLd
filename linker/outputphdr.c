@@ -161,8 +161,11 @@ Phdr *createPhdr(Context* ctx, int *num){
 }
 
 void Phdr_UpdateShdr(Chunk* c,Context* ctx){
+    c->phdrS.phdrNum = 0;
+    c->phdrS.phdrs = NULL;
     c->phdrS.phdrs = createPhdr(ctx,&c->phdrS.phdrNum);
     c->shdr.Size = sizeof (Phdr)*c->phdrS.phdrNum;
+   // printf("size %lu\n",c->shdr.Size);
 }
 
 void Phdr_CopyBuf(Chunk* c,Context* ctx){

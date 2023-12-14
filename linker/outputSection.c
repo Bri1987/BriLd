@@ -17,10 +17,11 @@ void OutputSec_CopyBuf(Chunk* c,Context* ctx){
     if(c->shdr.Type == SHT_NOBITS)
         return;
 
-
+    char* base = ctx->buf + c->shdr.Offset;
     for(int i=0; i< c->outpuSec.memberNum;i++){
         struct InputSection_* isec = c->outpuSec.members[i];
-        WriteTo(isec,ctx->buf+isec->offset);
+        //printf("isec offset %d\n",isec->offset);
+        WriteTo(isec,base+isec->offset,ctx);
     }
 }
 

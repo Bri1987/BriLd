@@ -2,8 +2,6 @@
 #include "output.h"
 #include "mergedSection.h"
 
-extern HashMap *mergedMap;
-
 MergedSection *NewMergedSection(char* name , uint64_t flags , uint32_t typ){
     MergedSection *mergedSection = (MergedSection*) malloc(sizeof (MergedSection));
     //mergedSection->map = HashMapInit();
@@ -39,6 +37,7 @@ MergedSection *GetMergedSectionInstance(Context* ctx, char* name,uint32_t typ,ui
     if(osec != NULL)
         return osec;
 
+    //v printf("nnnnname %s\n",name);
     osec = NewMergedSection(name,flags,typ);
     ctx->mergedSections = (struct MergedSection_**)realloc(ctx->mergedSections, (ctx->mergedSectionNum + 1) * sizeof(struct MergedSection_*));
     if(ctx->mergedSections == NULL)
@@ -48,23 +47,41 @@ MergedSection *GetMergedSectionInstance(Context* ctx, char* name,uint32_t typ,ui
     return osec;
 }
 
-SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align){
-    SectionFragment *frag = NULL;
-    uint32_t hashKey = hash(key);
-    char* key_ = convertHashToKey(hashKey);
+void printBytes(const char* str, size_t length) {
+    printf("%s\t",str);
+    printf("Bytes__: ");
+    for (size_t i = 0; i < length; i++) {
+        printf("%02X ", (unsigned char)str[i]);
+    }
+    printf("finish\n");
+}
 
-    //TODO 打印awesomeLd的go，为什么有两个1两个2，两个December这种
-    if(!HashMapContain(m->chunk->mergedSec.map,key_)){
+char* checke(HashMap* map,char* key,int len){
+    HashMapFirst(map);
+    for(Pair *p = HashMapNext(map); p!=NULL; p= HashMapNext(map)){
+        SectionFragment *frag = p->value;
+        if(frag->strslen == len && memcmp(p->key,key,len)==0)
+            return p->key;
+    }
+    return NULL;
+}
+
+SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align,int strslen){
+    SectionFragment *frag = NULL;
+
+    char* kk = checke(m->chunk->mergedSec.map,key,strslen);
+//    printf("before \t");
+//    printBytes(key,strslen);
+    if(kk == NULL){
         frag = NewSectionFragment(m);
-        HashMapPut(m->chunk->mergedSec.map,key_,frag);
-        //TODO 只拿一个map装所有有没有问题
-        HashMapPut(mergedMap,key_,key);
-        //printf("sss %d\n", HashMapSize(m->chunk->mergedSec.map));
+        frag->strslen = strslen;
+        HashMapPut(m->chunk->mergedSec.map,key,frag);
+        //printBytes(key,strslen);
+        //printf("key is %s , file %s\n",key,m->chunk->name);
     } else {
-        frag = HashMapGet(m->chunk->mergedSec.map,key_);
+        frag = HashMapGet(m->chunk->mergedSec.map,kk);
     }
 
-    //printf("%d\n",frag->P2Align);
     if(frag->P2Align < p2align){
         frag->P2Align = p2align;
     }
@@ -80,7 +97,8 @@ void AssignOffsets(MergedSection* m){
     int numFragments = 0;
     for(Pair* p = HashMapNext(m->chunk->mergedSec.map); p!=NULL; p = HashMapNext(m->chunk->mergedSec.map)){
         Fragment *fragment = (Fragment*) malloc(sizeof (Fragment));
-        fragment->key = HashMapGet(mergedMap,p->key);
+        //fragment->key = HashMapGet(mergedMap,p->key);
+        fragment->key = p->key;
         fragment->val = p->value;
         fragments[numFragments] = fragment;
         numFragments++;
@@ -99,7 +117,7 @@ void AssignOffsets(MergedSection* m){
     //		return x.Key < y.Key
     //	})
 
-    printf("n %d\n",numFragments);
+   // printf("n %d\n",numFragments);
     for (int i = 0; i < numFragments - 1; i++) {
         for (int j = 0; j < numFragments - i - 1; j++) {
             Fragment* x = fragments[j];
@@ -113,15 +131,15 @@ void AssignOffsets(MergedSection* m){
                     fragments[j + 1] = temp;
                 }
             }
-            else if (strlen(x->key) != strlen(y->key)) {
-                if (strlen(x->key) > strlen(y->key)) {
+            else if (x->val->strslen != y->val->strslen) {
+                if (x->val->strslen > y->val->strslen) {
                     // 交换两个元素的位置
                     Fragment* temp = fragments[j];
                     fragments[j] = fragments[j + 1];
                     fragments[j + 1] = temp;
                 }
             }
-            else if (strcmp(x->key, y->key) > 0) {
+            else if (memcmp(x->key, y->key,x->val->strslen) > 0) {
                 // 交换两个元素的位置
                 Fragment* temp = fragments[j];
                 fragments[j] = fragments[j + 1];
@@ -133,13 +151,15 @@ void AssignOffsets(MergedSection* m){
 
     uint64_t offset = 0;
     uint64_t p2align = 0;
-    printf("num %d\n",numFragments);
+    //printf("num %d\n",numFragments);
     for(int i=0; i< numFragments;i++){
         Fragment *frag = fragments[i];
         offset = AlignTo(offset, 1 << frag->val->P2Align);
         //printf("name %s , offset %lu\n",m->chunk->name,offset);
         frag->val->Offset = offset;
-        offset += strlen(frag->key);
+        //printf("name %s , offset %d\n",frag->key,offset);
+        //printBytes(frag->key,frag->val->strslen);
+        offset += frag->val->strslen;
         if(p2align < frag->val->P2Align){
             p2align = frag->val->P2Align;
         }
@@ -154,9 +174,10 @@ void MergedSec_CopyBuf(Chunk* c,Context* ctx){
 
     HashMapFirst(c->mergedSec.map);
     for(Pair* p = HashMapNext(c->mergedSec.map); p!=NULL; p = HashMapNext(c->mergedSec.map)){
-        char* key = HashMapGet(mergedMap,p->key);
+        //char* key = HashMapGet(mergedMap,p->key);
         SectionFragment *frag = p->value;
         //TODO check 可以用strcpy吧
-        strcpy(buf + frag->Offset,key);
+        //strcpy(buf + frag->Offset,key);
+        memcpy(buf+frag->Offset,p->key,frag->strslen);
     }
 }
