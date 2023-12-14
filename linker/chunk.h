@@ -64,6 +64,7 @@ typedef struct GotSection_{
     Chunk *chunk;
 }GotSection;
 
+// .got 表中的每个条目对应一个全局变量或函数的地址 , 针对tp_addr的偏移量
 typedef struct GotEntry_{
     int64_t idx;
     uint64_t val;

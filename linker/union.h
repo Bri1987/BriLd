@@ -37,25 +37,27 @@ struct ObjectFile_{
 };
 
 struct InputSection_{
-    struct ObjectFile_ *objectFile;
+    struct ObjectFile_ *objectFile;     //来自于某个文件
     char* contents;
-    uint32_t shndx;    //在section header中的下标值
+    uint32_t shndx;    //在section header数组中的下标值，为了找到它的section header信息
     uint32_t shsize;
     bool isAlive;      //看看这个inputsection是否放到最终可执行文件中
-    uint8_t P2Align;
+    uint8_t P2Align;    //power to align , 等于log2的addrAlign
 
     //在outputsection中的偏移
-    uint32_t  offset;
-    struct OutputSection_* outputSection;
+    uint32_t  offset;       //这个inputsection在它对应的outputsection中的偏移
+    struct OutputSection_* outputSection;   //记录一下这个input section属于哪个output section
 
     uint32_t RelsecIdx;
     Rela* rels;
     int relNum;
 };
 
+// InputFile 包含obj file或so file, 作为一个基类
+// 用于解析elf文件后存储信息用
 struct InputFile_{
     File *file;
-    //TODO check数组 ElfSyms 是一个 Sym 结构体的数组
+    //ElfSyms 是一个 Sym 结构体的数组
     Shdr* ElfSections;
     int64_t sectionNum;
 

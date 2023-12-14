@@ -7,6 +7,7 @@ char* GetOutputName(char* name, uint64_t flags) {
             ".ctors.", ".dtors."
     };
 
+    //merge-able section一定是readonly的
     if ((strcmp(name, ".rodata") == 0 || strncmp(name, ".rodata.", 8) == 0) && (flags & SHF_MERGE) != 0) {
         if ((flags & SHF_STRINGS) != 0) {
             return ".rodata.str";
@@ -15,6 +16,9 @@ char* GetOutputName(char* name, uint64_t flags) {
         }
     }
 
+    //.text或者.text.1 .text.* , 返回.text
+    //即都将这些section映射到.text
+    //多对一的映射，即多个inputsection映射到一个outputsection中
     size_t prefixesCount = sizeof(prefixes_) / sizeof(prefixes_[0]);
     for (size_t i = 0; i < prefixesCount; i++) {
         const char* prefix = prefixes_[i];

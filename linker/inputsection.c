@@ -1,11 +1,14 @@
 #include "union.h"
 #include "chunk.h"
 
+// Shdr 返回一个section对应的section header的信息
 Shdr *shdr_(InputSection* i){
     assert(i->shndx < i->objectFile->inputFile->sectionNum);
     return &i->objectFile->inputFile->ElfSections[i->shndx];
 }
 
+//1 2 4 8 16
+//1 10 100 1000 10000
 uint8_t toP2Align(uint64_t align) {
     if (align == 0) {
         return 0;
@@ -27,7 +30,6 @@ InputSection *NewInputSection(Context *ctx,char* name,ObjectFile* file,uint32_t 
     Shdr *shdr = shdr_(inputSection);
     inputSection->contents = malloc(shdr->Size+1);
     memcpy(inputSection->contents, file->inputFile->file->Contents + shdr->Offset, shdr->Size);
-    //TODO 不能加，原因是 ?
     inputSection->contents[shdr->Size] = '\0';
 
     assert((shdr->Flags & (uint64_t )2048) == 0);  //SHF_COMPRESSED
@@ -40,6 +42,7 @@ InputSection *NewInputSection(Context *ctx,char* name,ObjectFile* file,uint32_t 
     return inputSection;
 }
 
+// Name 拿到这个inputSection的名字
 char* Name(InputSection* inputSection){
     return ElfGetName(inputSection->objectFile->inputFile->ShStrtab,shdr_(inputSection)->Name);
 }
@@ -53,14 +56,8 @@ void WriteTo(InputSection *i,char* buf,Context* ctx){
         return;
 
     CopyContents(i,buf);
-//    uint32_t value;
-//    memcpy(&value, buf, sizeof(uint32_t));
-//    printf("es___    %u\n",value);
 
     if((shdr_(i)->Flags & SHF_ALLOC) != 0){
-//        uint32_t value;
-//        memcpy(&value, buf, sizeof(uint32_t));
-//        printf("es___    %u\n",value);
         ApplyRelocAlloc(i,ctx,buf);
     }
 }
@@ -73,10 +70,6 @@ void ApplyRelocAlloc(InputSection* i,Context* ctx,char* base){
 //    memcpy(&value1, base, sizeof(uint32_t));
 //    printf("test!__  %u\n",value1);
     for(int a = 0; a < i->relNum;a++){
-//        uint32_t value;
-//        memcpy(&value, base, sizeof(uint32_t));
-//        printf("test!__    %u\n",value);
-
         Rela rel = rels[a];
         if(rel.Type == 0/*R_RISCV_NONE*/ ||
             rel.Type == 51 /*R_RISCV_RELAX*/){

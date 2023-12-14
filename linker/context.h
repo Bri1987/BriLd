@@ -37,6 +37,7 @@ typedef struct {
     int chunkNum;
     char* buf;
 
+    //链接器自己生成了，保存于此
     struct OutputEhdr_* ehdr;
     struct OutputShdr_* shdr;
     struct OutputPhdr_* phdr;

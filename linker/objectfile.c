@@ -13,6 +13,7 @@ ObjectFile *NewObjectFile(File* file,bool isAlive){
     return objectFile;
 }
 
+//解析目标文件
 void Parse(Context *ctx,ObjectFile* o){
     o->SymtabSec = FindSection(o->inputFile,2);  //SHT_SYMTAB
     if(o->SymtabSec != NULL){
@@ -130,6 +131,7 @@ void InitializeSymbols(Context *ctx,ObjectFile* o){
         sym->value = esym->Val;
         sym->symIdx = i;
 
+        //绝对符号没有对应的inputSection
         if(!IsAbs(esym))
             SetInputSection(sym,o->Sections[GetShndx(o,esym,i)]);
     }
@@ -139,9 +141,11 @@ void InitializeSymbols(Context *ctx,ObjectFile* o){
         o->inputFile->Symbols[i] = (Symbol*) malloc(sizeof (Symbol));
         o->inputFile->numSymbols++;
     }
+    ////填充上所有localSym
     for(int i=0;i<o->inputFile->FirstGlobal;i++){
         o->inputFile->Symbols[i] = &o->inputFile->LocalSymbols[i];
     }
+    //填充其他非local的symbols , 在初始化阶段填入的值还是默认初值
     for(int i=o->inputFile->FirstGlobal;i<o->inputFile->symNum;i++){
         Sym* esym = &o->inputFile->ElfSyms[i];
         char* name = ElfGetName(o->inputFile->SymbolStrtab,esym->Name);
@@ -167,6 +171,7 @@ void InitializeMergeableSections(ObjectFile * o,Context* ctx){
     }
 }
 
+// 找到字符串结束即all zeors的位置
 int findNull(const char* data, uint64_t data_len, int entSize) {
     if (entSize == 1) {
         const char* result = memchr(data, 0, data_len);
@@ -202,10 +207,12 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
     uint64_t offset = 0;
     uint64_t data_len = shdr->Size;
     if((shdr->Flags & SHF_STRINGS) != 0){
-        //无固定大小
+        //strs
+        //每项数据不是固定大小的
         while (data_len > 0) {
-            //"Hello,World"
-            //"H\0\0\0e\0\0\0"
+            //如果entsize是1 : "hello,world"
+            //如果entsize是4 : "H\0\0\0e\0\0\0...." 将每个数据对齐到4
+            //处理对齐 , 找到结束位置
             int end = findNull(data,data_len,shdr->EntSize);
             if(end == -1){
                 fatal("string is not null terminated");
@@ -237,6 +244,8 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
             m->strNum++;m->fragOffsetNum++;
         }
     }else {
+        //const数据
+        //一项一项数据进行处理，每个数据固定EntSize大
         if (shdr->Size % shdr->EntSize != 0) {
             fatal("section size is not multiple of entsize");
         }
@@ -245,7 +254,6 @@ MergeableSection *splitSection(Context* ctx,InputSection* isec){
             char* substr = malloc((shdr->EntSize + 1) * sizeof(char));
             //strncpy(substr, data, shdr->EntSize);
             memcpy(substr, data, shdr->EntSize);
-            //TODO 加不加
             substr[shdr->EntSize] = '\0';
 
             m->strslen = realloc(m->strslen,sizeof (int) * (m->strNum + 1));
@@ -274,10 +282,12 @@ InputSection *GetSection(ObjectFile* o,Sym* esym,int idx){
 }
 
 void ResolveSymbols(ObjectFile* o){
+    //localSymbol是不需要resolve的,从第一个全局符号开始解析就行
     for(int i=o->inputFile->FirstGlobal;i<o->inputFile->symNum;i++){
         Sym* esym = &o->inputFile->ElfSyms[i];
         Symbol *sym = o->inputFile->Symbols[i];
 
+        //printf那些不也是undef吗，是不是也还是得处理 ; 不是，这些会在别的objFile处理到
         if(IsUndef(esym)){
             continue;
         }
@@ -288,6 +298,7 @@ void ResolveSymbols(ObjectFile* o){
             if(isec == NULL)
                 continue;
         }
+        //读到不同文件时，会将每一个global符号应该在的文件赋到对应的file
         if(sym->file == NULL){
             sym->file = o;
             SetInputSection(sym,isec);
@@ -342,6 +353,7 @@ void registerSectionPieces(ObjectFile* o){
         //printf("same m2\n");
     }
 
+    //因为symbol可能要改成属于一个fragment , 进行处理
     for(int i = 1;i<o->inputFile->symNum;i++){
         Symbol *sym = o->inputFile->Symbols[i];
         Sym *esym = &o->inputFile->ElfSyms[i];
@@ -365,6 +377,7 @@ void registerSectionPieces(ObjectFile* o){
     }
 }
 
+//跳过.eh_frame，就不处理异常了
 void SkipEhframeSections(ObjectFile* o){
     for(int i=0;i < o->isecNum;i++){
         InputSection *isec = o->Sections[i];
@@ -380,6 +393,5 @@ void ScanRelocations_(ObjectFile* o){
         if(isec != NULL && isec->isAlive && (shdr_(isec)->Flags & SHF_ALLOC) != 0){
             ScanRelocations__(isec);
         }
-       // printf("hi!\n");
     }
 }

@@ -3,6 +3,7 @@
 
 Chunk *NewChunk(){
     Chunk *chunk = (Chunk*) malloc(sizeof (Chunk));
+    //AddrAlign对齐量为1，以一个字节为对齐,Addr必须被align值整除
     chunk->shdr.AddrAlign = 1;
     chunk->shdr.Addr = 0;
     chunk->shdr.Name = 0;

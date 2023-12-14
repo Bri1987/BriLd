@@ -34,6 +34,7 @@ OutputSection *findOutputSection(Context* ctx,const char* name,uint64_t typ,uint
     return NULL;
 }
 
+// GetOutputSection 单例模式返回一个input section对应的output section
 OutputSection *GetOutputSection(Context* ctx,char* name,uint64_t typ,uint64_t flags){
     char* outputName = GetOutputName(name,flags);
     flags = flags & ~((uint64_t)SHF_GROUP) & ~((uint64_t)2048 /*SHF_COMPRESSED*/) & ~((uint64_t)SHF_LINK_ORDER);
@@ -42,7 +43,6 @@ OutputSection *GetOutputSection(Context* ctx,char* name,uint64_t typ,uint64_t fl
     if(osec!=NULL)
         return osec;
 
-    //TODO 检测一下name内存地址有没有问题
     osec = NewOutputSection(outputName,typ,flags,ctx->outputSecNum);
     ctx->outputSections = (OutputSection**) realloc(ctx->outputSections,sizeof (OutputSection*) * (ctx->outputSecNum+1));
     ctx->outputSections[ctx->outputSecNum] = osec;

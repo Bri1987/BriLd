@@ -1,12 +1,6 @@
 #include "chunk.h"
 
 Symbol *NewSymbol(char* name){
-//    Symbol *symbol = (Symbol*) malloc(sizeof (Symbol));
-//    //TODO 分不分内存
-//    symbol->name = malloc(sizeof (strlen(name)));
-//    strcpy(symbol->name,name);
-//    symbol->symIdx = -1;
-//    return symbol;
 
     Symbol *symbol = (Symbol*) malloc(sizeof (Symbol));
     symbol->name = name;
@@ -31,14 +25,17 @@ void SetSectionFragment(Symbol* s,SectionFragment* frag){
 }
 
 Symbol *GetSymbolByName(Context* ctx,char* name){
+    //如果symbolMap中已存，直接拿
     if(HashMapContain(ctx->SymbolMap,name)){
         return HashMapGet(ctx->SymbolMap,name);
     }
 
+    //否则创建一个新symbol，目前还是初始化状态
     HashMapPut(ctx->SymbolMap,name, NewSymbol(name));
     return HashMapGet(ctx->SymbolMap,name);
 }
 
+//返回这个symbol对应的一个Elf32_Sym条目
 Sym *ElfSym_(Symbol* s){
     assert(s->symIdx < s->file->inputFile->symNum);
     return &s->file->inputFile->ElfSyms[s->symIdx];
@@ -49,7 +46,6 @@ void clear(Symbol* s){
     s->symIdx = -1;
     s->inputSection = NULL;
     s->sectionFragment = NULL;
-    //TODO name制空吗
 }
 
 uint64_t Symbol_GetAddr(Symbol* s){

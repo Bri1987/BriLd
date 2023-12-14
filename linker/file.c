@@ -32,6 +32,7 @@ File* OpenLibrary(const char* filepath) {
     return library;
 }
 
+// FindLibrary 返回一个.a文件的file
 File* FindLibrary(Context* ctx, const char* name) {
     for (size_t i = 0; i < ctx->Args.LibraryPathsCount; i++) {
         const char* dir = ctx->Args.LibraryPaths[i];

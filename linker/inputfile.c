@@ -49,6 +49,7 @@ InputFile* NewInputFile(File* file){
     return inputFile;
 }
 
+// GetBytesFromShdr 返回一个section的数据内容
 char* GetBytesFromShdr(InputFile* inputFile, Shdr* shdr){
     uint64_t length = shdr->Size;
     char* contents = malloc(length+1);
@@ -58,10 +59,12 @@ char* GetBytesFromShdr(InputFile* inputFile, Shdr* shdr){
     return contents;
 }
 
+// GetBytesFromIdx 根据一个section的index拿到对应section的数据内容
 char* GetBytesFromIdx(InputFile* inputFile, int64_t idx){
     return GetBytesFromShdr(inputFile,&inputFile->ElfSections[idx]);
 }
 
+// FindSection 返回第一个Section type对应的section
 Shdr* FindSection(InputFile* f, uint32_t ty) {
     for (int i = 0; i < f->sectionNum; i++) {
         Shdr* shdr = &(f->ElfSections[i]);
@@ -72,6 +75,7 @@ Shdr* FindSection(InputFile* f, uint32_t ty) {
     return NULL;
 }
 
+// FillUpElfSyms 填充符号表表项到inputfile的ElfSyms数组
 void FillUpElfSyms(InputFile* inputFile,Shdr* s){
     char *bs = GetBytesFromShdr(inputFile,s);
     int numbs = s->Size / sizeof (Sym);
@@ -79,7 +83,6 @@ void FillUpElfSyms(InputFile* inputFile,Shdr* s){
     inputFile->symNum = numbs;
 
     while (numbs > 0){
-        //TODO 好像都 没名字
         Read(&inputFile->ElfSyms[inputFile->symNum - numbs],bs,sizeof(Sym));
         bs += sizeof(Sym);
         numbs--;

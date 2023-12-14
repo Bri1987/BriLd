@@ -81,6 +81,7 @@ uint64_t SetOutputSectionOffsets(Context* ctx){
 
     while (1) {
         Shdr* shdr = GetShdr(ctx->chunk[i]);
+        //偏移地址是当前虚拟地址减去起始虚拟地址
         shdr->Offset = shdr->Addr - GetShdr(first)->Addr;
         i++;
 
@@ -99,10 +100,12 @@ uint64_t SetOutputSectionOffsets(Context* ctx){
         fileoff += ctx->chunk[i]->shdr.Size;
     }
 
+    //算完值后重新更新phdr
     Phdr_UpdateShdr(ctx->phdr->chunk,ctx);
     return fileoff;
 }
 
+// 创建自己合成的section
 void CreateSyntheticSections(Context* ctx){
     struct OutputEhdr_* outputEhdr = NewOutputEhdr();
     ctx->ehdr = outputEhdr;
@@ -129,7 +132,7 @@ void CreateSyntheticSections(Context* ctx){
     ctx->chunkNum++;
 }
 
-//members填充
+// 填充output section里面的由input section组成的members数组
 void BinSections(Context* ctx){
     InputSection ***group = (InputSection***) malloc(sizeof (InputSection**) * ctx->outputSecNum);
     // 初始化 group 数组的每个元素为 NULL
@@ -145,6 +148,7 @@ void BinSections(Context* ctx){
                 continue;
             }
 
+            //idx为这个input section对应的output section的idx
             int64_t idx = isec->outputSection->chunk->outpuSec.idx;
             size_t prevSize = 0;
             if (group[idx] != NULL) {
@@ -154,7 +158,6 @@ void BinSections(Context* ctx){
             }
 
             // 分配新的 group[idx] 大小
-            //TODO +2
             group[idx] = (InputSection**)realloc(group[idx], (prevSize + 2) * sizeof(InputSection*));
             // 将 isec 添加到 group[idx] 的末尾
             group[idx][prevSize] = isec;
@@ -197,6 +200,7 @@ void CollectOutputSections(Context* ctx){
     }
 }
 
+//计算每个output section的input section们的offset
 void ComputeSectionSizes(Context* ctx){
     for(int i =0; i< ctx->outputSecNum;i++) {
         OutputSection *osec = ctx->outputSections[i];
@@ -247,6 +251,14 @@ void getRank(Chunk *chunk,Context* ctx){
     //printf("name %s , rank %d\n",chunk->name,chunk->rank);
 }
 
+// SortOutputSections 给output section排序，尽量让可以合为一个segment的section连在一起
+// 基本顺序 :
+// EHDR     //rank 0
+// PHDR     //rank 1
+// .note sections
+// alloc sections
+// non-alloc sections : 不会参与最终可执行文件的执行 , 也放在后面 max int32 -1
+// SHDR     //max int32
 void SortOutputSections(Context* ctx){
     for(int i=0;i<ctx->chunkNum;i++){
         getRank(ctx->chunk[i],ctx);
@@ -266,11 +278,18 @@ void SortOutputSections(Context* ctx){
     }
 }
 
+//在磁盘上不占任何空间
+//.tbss 段存储的是未初始化的线程本地存储（TLS）变量，而这些变量的初始值是在程序运行时动态分配的。因此，.tbss 段不需要在磁盘上占据空间，而是在程序加载和运行时根据需要进行动态分配
+//.bss 段存储的是未初始化的全局和静态变量，这些变量在程序加载时会被初始化为零或空值 ,在磁盘上，.bss 段占据的空间会被预留出来，并在程序加载时分配给这些变量
+//这里是虚拟地址，所以要分，但是在文件中.bss并不写入
+// .data .bss
+// .tdata .tbss
 bool isTbss(Chunk* chunk){
     Shdr *shdr = GetShdr(chunk);
     return (shdr->Type == SHT_NOBITS) && ((shdr->Flags & SHF_TLS) !=0);
 }
 
+//给每一个merged section中的fragments分别进行排序
 void ComputeMergedSectionSizes(Context* ctx){
     for(int i=0;i<ctx->mergedSectionNum;i++){
         MergedSection *m = ctx->mergedSections[i];

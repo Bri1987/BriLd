@@ -7,7 +7,7 @@ MergedSection *NewMergedSection(char* name , uint64_t flags , uint32_t typ){
     //mergedSection->map = HashMapInit();
     mergedSection->chunk = NewChunk();
 
-    //TODO 直接赋值
+    //直接赋值
     mergedSection->chunk->name = name;
     mergedSection->chunk->shdr.Flags = flags;
     mergedSection->chunk->shdr.Type = typ;
@@ -27,6 +27,7 @@ MergedSection* find(Context* ctx,char* name,uint32_t typ,uint64_t flags) {
     return NULL;
 }
 
+//单例模式找到一个name section对应的merged section
 MergedSection *GetMergedSectionInstance(Context* ctx, char* name,uint32_t typ,uint64_t flags){
     name = GetOutputName(name,flags);
 
@@ -66,12 +67,12 @@ char* checke(HashMap* map,char* key,int len){
     return NULL;
 }
 
+// Insert 向merged section插一个section fragment
+// key是split section中的原数据
 SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align,int strslen){
     SectionFragment *frag = NULL;
 
     char* kk = checke(m->chunk->mergedSec.map,key,strslen);
-//    printf("before \t");
-//    printBytes(key,strslen);
     if(kk == NULL){
         frag = NewSectionFragment(m);
         frag->strslen = strslen;
@@ -89,6 +90,7 @@ SectionFragment *Insert(MergedSection* m,char* key,uint32_t p2align,int strslen)
     return frag;
 }
 
+// AssignOffsets 计算各个section fragment的offset
 void AssignOffsets(MergedSection* m){
     Fragment **fragments;
     fragments = (Fragment**) malloc(sizeof (Fragment*) * HashMapSize(m->chunk->mergedSec.map));
@@ -118,11 +120,13 @@ void AssignOffsets(MergedSection* m){
     //	})
 
    // printf("n %d\n",numFragments);
+    //对fragment进行排序
     for (int i = 0; i < numFragments - 1; i++) {
         for (int j = 0; j < numFragments - i - 1; j++) {
             Fragment* x = fragments[j];
             Fragment* y = fragments[j + 1];
 
+            //1.首先对齐小的排在前面
             if (x->val->P2Align != y->val->P2Align) {
                 if (x->val->P2Align > y->val->P2Align) {
                     // 交换两个元素的位置
@@ -131,6 +135,7 @@ void AssignOffsets(MergedSection* m){
                     fragments[j + 1] = temp;
                 }
             }
+            //2.key长度小的排在前面
             else if (x->val->strslen != y->val->strslen) {
                 if (x->val->strslen > y->val->strslen) {
                     // 交换两个元素的位置
@@ -176,8 +181,6 @@ void MergedSec_CopyBuf(Chunk* c,Context* ctx){
     for(Pair* p = HashMapNext(c->mergedSec.map); p!=NULL; p = HashMapNext(c->mergedSec.map)){
         //char* key = HashMapGet(mergedMap,p->key);
         SectionFragment *frag = p->value;
-        //TODO check 可以用strcpy吧
-        //strcpy(buf + frag->Offset,key);
         memcpy(buf+frag->Offset,p->key,frag->strslen);
     }
 }

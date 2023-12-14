@@ -10,6 +10,7 @@ OutputEhdr *NewOutputEhdr(){
     return outputEhdr;
 }
 
+// 找到第一条执行代码地址
 uint64_t getEntryAddr(Context* ctx){
     for(int i=0; i<ctx->outputSecNum;i++){
         OutputSection *osec = ctx->outputSections[i];

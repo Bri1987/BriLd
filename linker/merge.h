@@ -7,14 +7,16 @@
 typedef struct SectionFragment_ SectionFragment;
 typedef struct MergedSection_ MergedSection;
 
+//将merge-able section分成小的数据块
 struct SectionFragment_ {
-    MergedSection* OutputSection;
+    MergedSection* OutputSection;   //进行一个双向关联吧
     uint32_t Offset;      //在section中的offset
     uint32_t P2Align;
     bool IsAlive;
     int strslen;
 } ;
 
+//input section拆成一个(? y)包含多个sectionFragment的merge-able section , 再放入merged section
 typedef struct MergeableSection{
     MergedSection * parent;
     uint8_t p2align;

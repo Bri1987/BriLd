@@ -14,7 +14,8 @@ MergeableSection *NewMergeableSection(){
     return mergeableSection;
 }
 
-//根据偏移，找到它属于哪个sectionFragment
+// GetFragment 获取到某个offset下的fragment
+// 注意要返回offset距离所在fragment起始处的距离
 SectionFragment* GetFragment(const MergeableSection* m, uint32_t offset, uint32_t* fragOffset) {
     size_t pos = 0;
     for (size_t i = 0; i < m->fragmentNum; i++) {

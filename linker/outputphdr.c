@@ -168,7 +168,8 @@ void Phdr_UpdateShdr(Chunk* c,Context* ctx){
    // printf("size %lu\n",c->shdr.Size);
 }
 
+// 根据chunk获得phdr的flag
+// chunk的flag和phdr的flag格式不是一致的，需要进行一个赋值
 void Phdr_CopyBuf(Chunk* c,Context* ctx){
-    //TODO check 这样写对不对
     Write(ctx->buf+c->shdr.Offset,sizeof (Phdr)*c->phdrS.phdrNum,c->phdrS.phdrs);
 }

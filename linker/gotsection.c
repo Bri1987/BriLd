@@ -1,5 +1,7 @@
 #include "chunk.h"
 
+//thread local storage TLS段也会把数据存到.got , libC中很多
+
 GotSection *NewGotSection(){
     GotSection *gotSection = (GotSection*) malloc(sizeof (GotSection));
     gotSection->chunk = NewChunk();
@@ -12,6 +14,7 @@ GotSection *NewGotSection(){
     return gotSection;
 }
 
+//向GotTpSyms中增加一个元素
 void AddGotTpSymbol(Chunk* chunk, Symbol* sym){
     sym->gotTpIdx = chunk->shdr.Size / 8;
     chunk->shdr.Size += 8;
@@ -42,7 +45,6 @@ void GotSec_CopyBuf(Chunk* c,Context* ctx){
     GotEntry *entries = GetEntries(c,ctx,&num);
     for(int i=0; i< num;i++){
         GotEntry ent = entries[i];
-        //TODO 这样没问题吧
         Write(ctx->buf + c->shdr.Offset + ent.idx*8 ,sizeof (uint64_t),&ent.val);
     }
 }
