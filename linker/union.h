@@ -70,9 +70,7 @@ struct InputFile_{
     char* SymbolStrtab;
     bool isAlive;
 
-    //TODO 好怪
     Symbol* LocalSymbols;    //只对内部可见
-    int64_t numLocalSymbols;
 
     Symbol** Symbols;       //可能und等全部symbol，会指向别处
     int64_t numSymbols;

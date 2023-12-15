@@ -14,5 +14,5 @@ int main(void) {
 }
 EOF
 
-riscv64-linux-gnu-gcc -B../cmake-build-debug/ -static "$t"/a.o -o "$t"/out -O0
+riscv64-linux-gnu-gcc -B./cmake-build-debug/ -static "$t"/a.o -o "$t"/out -O0
 qemu-riscv64 "$t"/out

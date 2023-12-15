@@ -13,14 +13,14 @@ struct SectionFragment_ {
     uint32_t Offset;      //在section中的offset
     uint32_t P2Align;
     bool IsAlive;
-    int strslen;
+    int strslen;            //保存这个sectionFragment的长度
 } ;
 
 //input section拆成一个(? y)包含多个sectionFragment的merge-able section , 再放入merged section
 typedef struct MergeableSection{
     MergedSection * parent;
     uint8_t p2align;
-    char** strs;
+    char** strs;            //fragments的原始数据, 是数据，不一定是字符串 , 还有const原始数据
     int strNum;
     int* strslen;
     uint32_t* fragOffsets;

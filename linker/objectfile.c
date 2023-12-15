@@ -87,6 +87,7 @@ void InitializeSections(ObjectFile* o,Context* ctx){
         }
     }
 
+    //处理重定向的section
     for(int i=0; i< o->inputFile->sectionNum;i++){
         Shdr *shdr = &o->inputFile->ElfSections[i];
         if(shdr->Type != SHT_RELA)
@@ -95,6 +96,8 @@ void InitializeSections(ObjectFile* o,Context* ctx){
         assert(shdr->Info < o->isecNum);
         InputSection *target = o->Sections[shdr->Info];
         if(target != NULL){
+            //没有两个relocation指向同一个section的情况
+            //重定向section的section header的info指向 重定位所适用的节区的节区头部索引，比如.rel.text指向.text
             assert(target->RelsecIdx == UINT32_MAX);
             target->RelsecIdx = i;
         }

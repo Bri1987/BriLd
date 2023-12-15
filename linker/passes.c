@@ -304,14 +304,14 @@ void ScanRelocations(Context* ctx){
 
     Symbol **syms = NULL;
     int numSyms = 0;
-    int count =0;
+   // int count =0;
     for(int i=0; i< ctx->ObjsCount;i++){
         ObjectFile *file = ctx->Objs[i];
        // printf("numSymbols %ld\n",file->inputFile->numSymbols);
         for(int j=0;j<file->inputFile->numSymbols;j++){
             Symbol *sym = file->inputFile->Symbols[j];
-            if(sym->flags != 0)
-                count++;
+//            if(sym->flags != 0)
+//                count++;
             if(sym->file == file && sym->flags!=0){
                 syms = (Symbol**) realloc(syms,sizeof (Symbol*) * (numSyms+1));
                 syms[numSyms] = sym;
