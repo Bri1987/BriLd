@@ -4,7 +4,8 @@
 
 这个最终代码是学习中科院PLCT实验室推出的链接器课程完成，指路B站视频：
 
-https://www.bilibili.com/video/BV1D8411j7fo/，并通过C语言重写。
+https://www.bilibili.com/video/BV1D8411j7fo/
+并通过C语言重写。
 
 顺道也学习了一点RISCV相关的知识。
 
